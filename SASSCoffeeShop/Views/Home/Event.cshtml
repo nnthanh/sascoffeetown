@@ -1,0 +1,387 @@
+﻿
+@{
+    ViewBag.Title = "Event";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="content">
+
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="typo-line">
+                                    <div class="form-group">
+                                        <p class="category">Tên</p>
+                                        <input class="form-control border-input" type="text" id="name" required />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="typo-line">
+                                    <div class="form-group">
+                                        <p class="category">Branch</p>                                     
+                                        <div class="dropdown">
+                                            <input class="dropdown-toggle form-control border-input" id="branch" readonly data-toggle="dropdown" type="text" required />
+                                            <ul class="dropdown-menu" id="branch_ul">
+
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        @*<div class="row">
+                            <div class="col-md-5">
+                                <div class="typo-line">
+                                    <div class="form-group">
+                                        <p class="category">For</p>
+                                        <div class="dropdown">
+                                            <input class="dropdown-toggle form-control border-input" id="for" readonly data-toggle="dropdown" type="text" required placeholder="G/T/S" />
+                                            <ul class="dropdown-menu">
+                                                <li><a onclick="forOnChange('G')">G</a></li>
+                                                <li><a onclick="forOnChange('T')">T</a></li>
+                                                <li><a onclick="forOnChange('S')">S</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>*@
+
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="typo-line">
+                                    <div class="form-group">
+                                        <p class="category">End Date</p>
+                                        <input class="form-control border-input" type="date" id="eventdate" required />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="typo-line">
+                                    <div class="form-group">
+                                        <p class="category">Discount</p>
+                                        <input class="form-control border-input" type="text" id="discount" maxlength="3" onkeypress='return event.charCode >= 48 && event.charCode <= 57' required />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="typo-line">
+                                    <div class="form-group">
+                                        <p class="category">Brief Description</p>
+                                        <input class="form-control border-input" type="text" id="briefDescription" required />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="typo-line">
+                                    <div class="form-group">
+                                        <p class="category">Description</p>
+                                        @*<textarea rows="5" class="form-control border-input" type="text" id="description" required></textarea>*@
+                                        <div id="alerts"></div>
+                                        <div class="btn-toolbar editor" data-role="editor-toolbar" data-target="#editor">
+                                            <div class="btn-group">
+                                                <a class="btn dropdown-toggle" data-toggle="dropdown" title="" data-original-title="Font"><i class="fa fa-font"></i><b class="caret"></b></a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a data-edit="fontName Serif" style="font-family:'Serif'">Serif</a></li>
+                                                    <li><a data-edit="fontName Sans" style="font-family:'Sans'">Sans</a></li>
+                                                    <li><a data-edit="fontName Arial" style="font-family:'Arial'">Arial</a></li>
+                                                    <li><a data-edit="fontName Arial Black" style="font-family:'Arial Black'">Arial Black</a></li>
+                                                    <li><a data-edit="fontName Courier" style="font-family:'Courier'">Courier</a></li>
+                                                    <li><a data-edit="fontName Courier New" style="font-family:'Courier New'">Courier New</a></li>
+                                                    <li><a data-edit="fontName Comic Sans MS" style="font-family:'Comic Sans MS'">Comic Sans MS</a></li>
+                                                    <li><a data-edit="fontName Helvetica" style="font-family:'Helvetica'">Helvetica</a></li>
+                                                    <li><a data-edit="fontName Impact" style="font-family:'Impact'">Impact</a></li>
+                                                    <li><a data-edit="fontName Lucida Grande" style="font-family:'Lucida Grande'">Lucida Grande</a></li>
+                                                    <li><a data-edit="fontName Lucida Sans" style="font-family:'Lucida Sans'">Lucida Sans</a></li>
+                                                    <li><a data-edit="fontName Tahoma" style="font-family:'Tahoma'">Tahoma</a></li>
+                                                    <li><a data-edit="fontName Times" style="font-family:'Times'">Times</a></li>
+                                                    <li><a data-edit="fontName Times New Roman" style="font-family:'Times New Roman'">Times New Roman</a></li>
+                                                    <li><a data-edit="fontName Verdana" style="font-family:'Verdana'">Verdana</a></li>
+                                                </ul>
+                                            </div>
+                                            <div class="btn-group">
+                                                <a class="btn dropdown-toggle" data-toggle="dropdown" title="" data-original-title="Font Size"><i class="fa fa-text-height"></i>&nbsp;<b class="caret"></b></a>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a data-edit="fontSize 5">
+                                                            <p style="font-size:17px">Huge</p>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a data-edit="fontSize 3">
+                                                            <p style="font-size:14px">Normal</p>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a data-edit="fontSize 1">
+                                                            <p style="font-size:11px">Small</p>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="btn-group">
+                                                <a class="btn" data-edit="bold" title="" data-original-title="Bold (Ctrl/Cmd+B)"><i class="fa fa-bold"></i></a>
+                                                <a class="btn" data-edit="italic" title="" data-original-title="Italic (Ctrl/Cmd+I)"><i class="fa fa-italic"></i></a>
+                                                <a class="btn" data-edit="strikethrough" title="" data-original-title="Strikethrough"><i class="fa fa-strikethrough"></i></a>
+                                                <a class="btn" data-edit="underline" title="" data-original-title="Underline (Ctrl/Cmd+U)"><i class="fa fa-underline"></i></a>
+                                            </div>
+                                            <div class="btn-group">
+                                                <a class="btn" data-edit="insertunorderedlist" title="" data-original-title="Bullet list"><i class="fa fa-list-ul"></i></a>
+                                                <a class="btn" data-edit="insertorderedlist" title="" data-original-title="Number list"><i class="fa fa-list-ol"></i></a>
+                                                <a class="btn" data-edit="outdent" title="" data-original-title="Reduce indent (Shift+Tab)"><i class="fa fa-dedent"></i></a>
+                                                <a class="btn" data-edit="indent" title="" data-original-title="Indent (Tab)"><i class="fa fa-indent"></i></a>
+                                            </div>
+                                            <div class="btn-group">
+                                                <a class="btn btn-info" data-edit="justifyleft" title="" data-original-title="Align Left (Ctrl/Cmd+L)"><i class="fa fa-align-left"></i></a>
+                                                <a class="btn" data-edit="justifycenter" title="" data-original-title="Center (Ctrl/Cmd+E)"><i class="fa fa-align-center"></i></a>
+                                                <a class="btn" data-edit="justifyright" title="" data-original-title="Align Right (Ctrl/Cmd+R)"><i class="fa fa-align-right"></i></a>
+                                                <a class="btn" data-edit="justifyfull" title="" data-original-title="Justify (Ctrl/Cmd+J)"><i class="fa fa-align-justify"></i></a>
+                                            </div>
+                                            <div class="btn-group">
+                                                <a class="btn dropdown-toggle" data-toggle="dropdown" title="" data-original-title="Hyperlink"><i class="fa fa-link"></i></a>
+                                                <div class="dropdown-menu input-append">
+                                                    <input class="span2" placeholder="URL" type="text" data-edit="createLink">
+                                                    <button class="btn" type="button">Add</button>
+                                                </div>
+                                               
+                                            </div>
+
+                                            <div class="btn-group">
+                                                <a class="btn" data-edit="unlink" title="" data-original-title="Remove Hyperlink"><i class="fa fa-cut"></i></a>
+                                                <a class="btn" title="" id="pictureBtn" data-original-title="Insert picture (or just drag &amp; drop)"><i class="fa fa-picture-o"></i></a>
+                                                <input type="file" data-role="magic-overlay" data-target="#pictureBtn" data-edit="insertImage" style="opacity: 0; position: absolute; top: 0px; left: 0px; width: 37px; height: 34px;">
+                                            </div>
+                                            <div class="btn-group">
+                                                <a class="btn" data-edit="undo" title="" data-original-title="Undo (Ctrl/Cmd+Z)"><i class="fa fa-undo"></i></a>
+                                                <a class="btn" data-edit="redo" title="" data-original-title="Redo (Ctrl/Cmd+Y)"><i class="fa fa-repeat"></i></a>
+                                            </div>
+                                        </div>
+
+                                        <br />
+                                        <div id="editor" class="form-control border-input" contenteditable="true" style="overflow:hidden;height:auto;">
+
+                                        </div>
+                                        @*<textarea name="descr" id="descr" style="display:none;"></textarea>*@
+                                        @*<textarea rows="5" class="form-control border-input" type="text" name="descr" id="descr" style="display:none;" required></textarea>*@
+                                        <br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="typo-line">
+                                    <div class="form-group">
+                                        <button class="btn btn-default" type="submit" id="submitBtn">Xác nhận</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#brand').text('Event');
+    var branchid = 0;
+    $(document).ready(function () {
+        $.ajax({
+            type: 'GET',
+            url: 'http://35.185.147.78/sas/sas_server/branch/getAll',
+            success: function (resp) {
+                if (resp.statuskey == true) {
+                    
+                    resp.branchList.forEach(function (entry) {
+                        //$('#branch_ul').append('<li><a onclick="branchOnChange(' + "'" + entry.name + "'" + ')">' + entry.name + '</a></li>');
+                        $('#branch_ul').append('<li><a onclick="branchOnChange(' + "'" + entry.name + "','" + entry.id + "'" + ')">' + entry.name + '</a></li>');
+                    });
+                } else {
+                    swal(
+                        'Thất bại',
+                        resp.message,
+                        'error'
+                    );
+                    $(':button').prop('disabled', false);
+                }
+            },
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8'
+        });
+    });
+
+    function branchOnChange(value, id) {
+        branchid = id;
+        $('#branch').text('' + value);
+        $('#branch').val(value);
+    }
+
+    function forOnChange(value) {
+        $('#for').text('' + value);
+        $('#for').val(value);
+    }
+
+    String.prototype.splice = function (idx, rem, str) {
+        return this.slice(0, idx) + str + this.slice(idx + Math.abs(rem));
+    };
+
+    $(document).keypress(function (e) {
+        if (e.which == 13) {
+            $('#submitBtn').click();
+        }
+    });
+
+    document.getElementById("submitBtn").onclick = function () {
+        $('#loader').show();
+        $(':button').prop('disabled', true);
+        var vurl = 'http://35.185.147.78/sas/sas_server/admin/event/create/' + '@Session["loggedToken"].ToString()';
+
+        var temp = new Date($('#eventdate').val()).toDateString();
+        //temp = 
+
+        var date = temp.substr(4, temp.length);
+
+        date = date.splice(6, 0, ',');
+
+        var branch = {
+            id: branchid
+        };
+
+        var res = {
+            //userType: $('#for').val(),
+            fullDescription: $('#editor').html(),
+            branch: {
+                id: branchid
+            },
+            description: $('#briefDescription').val(),
+            dateExpired: date,
+            discount: $('#discount').val(),
+            name: $('#name').val()
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: vurl,
+            data: JSON.stringify(res),
+            success: function (resp) {
+                if (resp.statuskey == true) {
+                    $(':button').prop('disabled', false);
+                    swal(
+                        'Thành công',
+                        resp.message,
+                        'success'
+                    );
+                } else {
+                    swal(
+                        'Thất bại',
+                        resp.message,
+                        'error'
+                    );
+                    $(':button').prop('disabled', false);
+                }
+            },
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8'
+        });
+        $('#loader').hide();
+    };
+</script>
+
+<!-- bootstrap-wysiwyg -->
+<script>
+    $(document).ready(function () {
+        $('.xcxc').click(function() {
+          $('#descr').val($('#editor').html());
+        });
+      });
+
+      $(document).ready(function() {
+        function initToolbarBootstrapBindings() {
+          var fonts = ['Serif', 'Sans', 'Arial', 'Arial Black', 'Courier',
+              'Courier New', 'Comic Sans MS', 'Helvetica', 'Impact', 'Lucida Grande', 'Lucida Sans', 'Tahoma', 'Times',
+              'Times New Roman', 'Verdana'
+            ],
+            fontTarget = $('[title=Font]').siblings('.dropdown-menu');
+          $.each(fonts, function(idx, fontName) {
+            fontTarget.append($('<li><a data-edit="fontName ' + fontName + '" style="font-family:\'' + fontName + '\'">' + fontName + '</a></li>'));
+          });
+          $('a[title]').tooltip({
+            container: 'body'
+          });
+          $('.dropdown-menu input').click(function() {
+              return false;
+            })
+            .change(function() {
+              $(this).parent('.dropdown-menu').siblings('.dropdown-toggle').dropdown('toggle');
+            })
+            .keydown('esc', function() {
+              this.value = '';
+              $(this).change();
+            });
+
+          $('[data-role=magic-overlay]').each(function() {
+            var overlay = $(this),
+              target = $(overlay.data('target'));
+            overlay.css('opacity', 0).css('position', 'absolute').offset(target.offset()).width(target.outerWidth()).height(target.outerHeight());
+          });
+
+          if ("onwebkitspeechchange" in document.createElement("input")) {
+            var editorOffset = $('#editor').offset();
+
+            $('.voiceBtn').css('position', 'absolute').offset({
+              top: editorOffset.top,
+              left: editorOffset.left + $('#editor').innerWidth() - 35
+            });
+          } else {
+            $('.voiceBtn').hide();
+          }
+        }
+
+        function showErrorAlert(reason, detail) {
+          var msg = '';
+          if (reason === 'unsupported-file-type') {
+            msg = "Unsupported format " + detail;
+          } else {
+            console.log("error uploading file", reason, detail);
+          }
+          $('<div class="alert"> <button type="button" class="close" data-dismiss="alert">&times;</button>' +
+            '<strong>File upload error</strong> ' + msg + ' </div>').prependTo('#alerts');
+        }
+
+        initToolbarBootstrapBindings();
+
+        $('#editor').wysiwyg({
+          fileUploadError: showErrorAlert
+        });
+
+        window.prettyPrint && prettyPrint();
+      });
+</script>
+<!-- /bootstrap-wysiwyg -->
+
+<!-- bootstrap-wysiwyg -->
+<script src="~/Content/vendors/bootstrap-wysiwyg/js/bootstrap-wysiwyg.min.js"></script>
+<script src="~/Content/vendors/jquery.hotkeys/jquery.hotkeys.js"></script>
+<script src="~/Content/vendors/google-code-prettify/src/prettify.js"></script>

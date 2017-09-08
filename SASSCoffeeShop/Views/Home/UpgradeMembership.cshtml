@@ -1,0 +1,172 @@
+﻿
+@{
+    ViewBag.Title = "UpgradeMembership";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="content">
+
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="typo-line">
+                                    <div class="form-group"">
+                                        <p class="category">Mã thành viên</p>
+                                        <input class="form-control border-input" type="text" id="mathanhvien" value="G" maxlength="6" onkeypress='return event.charCode >= 48 && event.charCode <= 57' placeholder="and 5 digits number" required />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="typo-line">
+                                    <div class="form-group">
+                                        <p class="category">Branch</p>
+                                        <div class="dropdown">
+                                            <input class="dropdown-toggle form-control border-input" id="branch" readonly data-toggle="dropdown" type="text" required />
+                                            <ul class="dropdown-menu" id="branch_ul"></ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="typo-line">
+                                    <div class="form-group"">
+                                        <p class="category">Bạn là</p>
+                                        <button class="btn btn-info active" id="hocvien">Học viên</button>
+                                        <button class="btn btn-info" id="giangvien">Giảng viên</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="typo-line">
+                                    <div class="form-group"">
+                                        <button class="btn btn-default" type="submit" id="submitBtn">Xác nhận</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    var branchid = 0;
+
+    $(document).ready(function () {
+        $.notify({
+            icon: 'ti-gift',
+            message: "Chào mừng <b>" + '@Session["loggedUser"].ToString().ToUpper()' +"</b> đã đến với  <b>SAS Coffee Town</b> - chúc bạn một ngày tốt lành."
+
+        }, {
+            type: 'success',
+            timer: 4000
+        });
+
+        $.ajax({
+            type: 'GET',
+            url: 'http://35.185.147.78/sas/sas_server/branch/getAll',
+            success: function (resp) {
+                if (resp.statuskey == true) {
+
+                    resp.branchList.forEach(function (entry) {
+                        $('#branch_ul').append('<li><a onclick="branchOnChange(' + "'" + entry.name + "','" + entry.id + "'" +')">' + entry.name + '</a></li>');
+                    });
+                } else {
+                    swal(
+                        'Thất bại',
+                        resp.message,
+                        'error'
+                    );
+                    $(':button').prop('disabled', false);
+                }
+            },
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8'
+        });
+    });
+
+    function branchOnChange(value, id) {
+        //alert(id);
+        branchid = id;
+        $('#branch').text('' + value);
+        $('#branch').val(value);
+    }
+
+    $('#brand').text('Nâng cấp thành viên');
+    $("input").keydown(function (e) {
+        var oldvalue = $(this).val();
+        var field = this;
+        setTimeout(function () {
+            if (field.value.indexOf('G') !== 0) {
+                $(field).val(oldvalue);
+            }
+        }, 1);
+    });
+    $('#hocvien').click(function () {
+        $('#giangvien').removeClass('active');
+        $('#hocvien').addClass('active');
+    });
+    $('#giangvien').click(function () {
+        $('#hocvien').removeClass('active');
+        $('#giangvien').addClass('active');
+    });
+
+    $(document).keypress(function (e) {
+        if (e.which == 13) {
+            $('#submitBtn').click();
+        }
+    });
+
+    document.getElementById("submitBtn").onclick = function () {
+        $('#loader').show();
+        $(':button').prop('disabled', true);
+        var vurl;
+
+        if ($('#giangvien').hasClass('active')) {
+            vurl = 'http://35.185.147.78/sas/sas_server/admin/upgradeTeacher/' + branchid + '/' + $('#mathanhvien').val() +'/'+ '@Session["loggedToken"].ToString()';
+        } else {
+            vurl = 'http://35.185.147.78/sas/sas_server/admin/upgradeStudent/' + branchid + '/' + $('#mathanhvien').val() + '/' + '@Session["loggedToken"].ToString()';
+        }
+        $.ajax({
+            type: 'GET',
+            url: vurl,
+            success: function (resp) {
+                if (resp.statuskey == true) {
+                    $(':button').prop('disabled', false);
+                    swal(
+                        'Thành công',
+                        resp.message,
+                        'success'
+                    );
+                } else {
+                    swal(
+                        'Thất bại',
+                        resp.message,
+                        'error'
+                    );
+                    $(':button').prop('disabled', false);
+                }
+
+                $('#loader').hide();
+            },
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8'
+        });
+    };
+</script>

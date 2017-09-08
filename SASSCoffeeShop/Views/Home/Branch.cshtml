@@ -1,0 +1,365 @@
+﻿
+@{
+    ViewBag.Title = "Cửa hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            @*Edit*@
+            <div class="col-md-6" style="text-align:center;">
+                <div class="card">
+                    <div class="content">
+                        <h4>Danh sách cửa hàng</h4>
+                        <div class="row">
+                            <div class="col-md-10">
+                                <div class="typo-line">
+                                    <div class="form-group">
+                                        <p class="category">Tên</p>
+                                        <div class="dropdown">
+                                            <input class="dropdown-toggle form-control border-input" id="ten" readonly data-toggle="dropdown" type="text" required="required" />
+                                            <ul class="dropdown-menu" id="branch_ul"></ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-10">
+                                <div class="typo-line">
+                                    <div class="form-group">
+                                        <p class="category">Địa chỉ</p>
+                                        <input class="form-control border-input" type="text" id="diachi"  placeholder="Địa chỉ" required="required" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-10">
+                                <div class="typo-line">
+                                    <div class="form-group">
+                                        <p class="category">Phone</p>
+                                        <input class="form-control border-input" type="text" id="phone" onkeypress='return event.charCode >= 48 && event.charCode <= 57' placeholder="Số điện thoại" required="required" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-10">
+                                <div class="typo-line">
+                                    <div class="form-group">
+                                        <p class="category">Open</p>
+                                        <input class="form-control border-input" type="text" id="open"  placeholder="Thời gian mở cửa" required="required" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-10">
+                                <div class="typo-line">
+                                    <div class="form-group">
+                                        <p class="category">Fanpage</p>
+                                        <input class="form-control border-input" type="text" id="fanpage"  placeholder="Fanpage" required="required" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-10">
+                                <div class="typo-line">
+                                    <div class="form-group">
+                                        <p class="category">Latitude</p>
+                                        <input class="form-control border-input" type="text" id="lati" maxlength="10" onkeypress='return (event.charCode >= 48 && event.charCode <= 57 || event.charCode == 46)' placeholder="Kinh độ" required="required" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-10">
+                                <div class="typo-line">
+                                    <div class="form-group">
+                                        <p class="category">Longitude</p>
+                                        <input class="form-control border-input" type="text" id="longi" maxlength="10" onkeypress='return (event.charCode >= 48 && event.charCode <= 57 || event.charCode == 46)' placeholder="Vĩ độ" required="required" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-10">
+                                <div class="typo-line">
+                                    <div class="form-group" >
+                                        <button class="btn btn-default" type="submit" id="editBtn">Chỉnh sửa</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            @*Add new*@
+            <div class="col-md-6" style="text-align:center;">
+                <div class="card">
+                    <div class="content">
+                        <h4>Thêm cửa hàng mới</h4>
+
+                        <div class="row">
+                            <div class="col-md-10">
+                                <div class="typo-line">
+                                    <div class="form-group">
+                                        <p class="category">Tên</p>
+                                        <input class="form-control border-input" type="text" id="add_ten" placeholder="Tên cửa hàng" required="required" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-10">
+                                <div class="typo-line">
+                                    <div class="form-group">
+                                        <p class="category">Địa chỉ</p>
+                                        <input class="form-control border-input" type="text" id="add_diachi" placeholder="Địa chỉ" required="required" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-10">
+                                <div class="typo-line">
+                                    <div class="form-group">
+                                        <p class="category">Phone</p>
+                                        <input class="form-control border-input" type="text" id="add_phone" onkeypress='return event.charCode >= 48 && event.charCode <= 57' placeholder="Số điện thoại" required="required" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-10">
+                                <div class="typo-line">
+                                    <div class="form-group">
+                                        <p class="category">Open</p>
+                                        <input class="form-control border-input" type="text" id="add_open" placeholder="Thời gian mở cửa" required="required" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-10">
+                                <div class="typo-line">
+                                    <div class="form-group">
+                                        <p class="category">Fanpage</p>
+                                        <input class="form-control border-input" type="text" id="add_fanpage" placeholder="Fanpage" required="required" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-10">
+                                <div class="typo-line">
+                                    <div class="form-group">
+                                        <p class="category">Latitude</p>
+                                        <input class="form-control border-input" type="text" id="add_lati" maxlength="10" onkeypress='return (event.charCode >= 48 && event.charCode <= 57 || event.charCode == 46)' placeholder="Kinh độ" required="required" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-10">
+                                <div class="typo-line">
+                                    <div class="form-group">
+                                        <p class="category">Longitude</p>
+                                        <input class="form-control border-input" type="text" id="add_longi" maxlength="10" onkeypress='return (event.charCode >= 48 && event.charCode <= 57 || event.charCode == 46)' placeholder="Vĩ độ" required="required" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-10">
+                                <div class="typo-line">
+                                    <div class="form-group">
+                                        <button class="btn btn-default" type="submit" id="addBtn">Thêm mới</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var b_id, b_ten, b_diachi, b_phone, b_open, b_fanpage, b_lat, b_long;
+
+    $(document).ready(function () {
+
+        $.ajax({
+            type: 'GET',
+            url: 'http://35.185.147.78/sas/sas_server/branch/getAll',
+            success: function (resp) {
+                if (resp.statuskey == true) {
+
+                    resp.branchList.forEach(function (entry) {
+                        $('#branch_ul').append('<li><a onclick="branchOnChange(' + "'" + entry.name + "','" + entry.id + "','" + entry.address + "','" + entry.phone + "','" + entry.open + "','" + entry.fanpage + "','" + entry.latitude + "','" + entry.longitude + "'" + ')">' + entry.name + '</a></li>');
+                    });
+                } else {
+                    swal(
+                        'Thất bại',
+                        resp.message,
+                        'error'
+                    );
+                    $(':button').prop('disabled', false);
+                }
+            },
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8'
+        });
+    });
+
+    function setUndefinedToEmpty(id) {
+        if (id == "undefined") {
+            return '';
+        }
+        return id;
+    }
+
+    function branchOnChange(name, id, address, phone, open, fanpage, latitude, longitude) {
+        //alert(id);
+
+        b_id = setUndefinedToEmpty(id);
+        b_ten = setUndefinedToEmpty(name);
+        b_diachi = setUndefinedToEmpty(address);
+        b_phone = setUndefinedToEmpty(phone);
+        b_open = setUndefinedToEmpty(open);
+        b_fanpage = setUndefinedToEmpty(fanpage);
+        b_lat = setUndefinedToEmpty(latitude);
+        b_long = setUndefinedToEmpty(longitude);
+
+        $('#ten').text('' + b_ten);
+        $('#ten').val(b_ten);
+        $('#diachi').text('' + b_diachi);
+        $('#diachi').val(b_diachi);
+        $('#phone').text('' + b_phone);
+        $('#phone').val(b_phone);
+        $('#open').text('' + b_open);
+        $('#open').val(b_open);
+        $('#fanpage').text('' + b_fanpage);
+        $('#fanpage').val(b_fanpage);
+        $('#lati').text('' + b_lat);
+        $('#lati').val(b_lat);
+        $('#longi').text('' + b_long);
+        $('#longi').val(b_long);
+    }
+
+    $('#brand').text('Cửa hàng');
+
+    $(document).keypress(function (e) {
+        if (e.which == 13) {
+            $('#submitBtn').click();
+        }
+    });
+
+    //edit btn
+    document.getElementById("editBtn").onclick = function () {
+        $('#loader').show();
+        $(':button').prop('disabled', true);
+
+        var res = {
+            address: $('#diachi').val(),
+            phone: $('#phone').val(),
+            open: $('#open').val(),
+            fanpage: $('#fanpage').val(),
+            latitude: $('#lati').val(),
+            longitude: $('#longi').val(),
+            id: b_id,
+            name: $('#ten').val()
+        };
+        $.ajax({
+            type: 'POST',
+            url: 'http://35.185.147.78/sas/sas_server/admin/editBranch/' + '@Session["loggedToken"].ToString()',
+            data: JSON.stringify(res),
+            success: function (resp) {
+                if (resp.statuskey == true) {
+                    $(':button').prop('disabled', false);
+                    swal(
+                        'Thành công',
+                        resp.message,
+                        'success'
+                    );
+                } else {
+                    swal(
+                        'Thất bại',
+                        resp.message,
+                        'error'
+                    );
+                    $(':button').prop('disabled', false);
+                }
+
+                $('#loader').hide();
+            },
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8'
+        });
+    };
+    //Add btn
+    document.getElementById("addBtn").onclick = function () {
+        $('#loader').show();
+        $(':button').prop('disabled', true);
+
+        var res = {
+            address: $('#add_diachi').val(),
+            phone: $('#add_phone').val(),
+            open: $('#add_open').val(),
+            fanpage: $('#add_fanpage').val(),
+            latitude: $('#add_lati').val(),
+            longitude: $('#add_longi').val(),
+            name: $('#add_ten').val()
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: 'http://35.185.147.78/sas/sas_server/admin/addBranch/' + '@Session["loggedToken"].ToString()',
+            data: JSON.stringify(res),
+            success: function (resp) {
+                if (resp.statuskey == true) {
+                    $(':button').prop('disabled', false);
+                    swal(
+                        'Thành công',
+                        resp.message,
+                        'success'
+                    );
+                } else {
+                    swal(
+                        'Thất bại',
+                        resp.message,
+                        'error'
+                    );
+                    $(':button').prop('disabled', false);
+                }
+
+                $('#loader').hide();
+            },
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8'
+        });
+    };
+</script>

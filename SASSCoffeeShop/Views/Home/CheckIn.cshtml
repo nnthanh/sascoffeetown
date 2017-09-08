@@ -1,0 +1,88 @@
+﻿
+@{
+    ViewBag.Title = "CheckIn";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="content">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="typo-line">
+                                    <div class="form-group">
+                                        <p class="category">Mã thành viên</p>
+                                        <input class="form-control border-input" id="mathanhvien" type="text" maxlength="6" placeholder="G/T/S and 5 digits number" required />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="typo-line">
+                                    <div class="form-group">
+                                        <button class="btn btn-default" type="submit" id="submitBtn">Xác nhận</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#brand').text('Check in');
+
+    $('#mathanhvien').keyup(function () {
+        var $th = $(this);
+        $th.val($th.val().replace(/[^(?=.*?(G|T|X))0-9]/g, function (str) {
+            //alert('You typed " ' + str + ' ".\n\nPlease use only letters and numbers.');
+            return '';
+        }));
+    });  
+
+    $(document).keypress(function (e) {
+        if (e.which == 13) {
+            $('#submitBtn').click();
+        }
+    });
+
+    document.getElementById("submitBtn").onclick = function () {
+        $('#loader').show();
+        $(':button').prop('disabled', true);
+        var vurl = 'http://35.185.147.78/sas/sas_server/admin/checkin/' + $('#mathanhvien').val() + '/' + '@Session["loggedToken"].ToString()';
+
+        $.ajax({
+            type: 'GET',
+            url: vurl,
+            success: function (resp) {
+                if (resp.statuskey == true) {
+                    $(':button').prop('disabled', false);
+                    swal(
+                        'Thành công',
+                        resp.message,
+                        'success'
+                    );
+                } else {
+                    swal(
+                        'Thất bại',
+                        resp.message,
+                        'error'
+                    );
+                    $(':button').prop('disabled', false);
+                }
+                $('#loader').hide();
+            },
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8'
+        });
+    };
+</script>
