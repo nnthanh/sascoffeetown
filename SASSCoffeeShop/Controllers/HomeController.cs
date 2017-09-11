@@ -61,5 +61,27 @@ namespace SASSCoffeeShop.Controllers
 
             return View();
         }
+
+        public ActionResult EventList()
+        {
+            //Check session
+            if (Session["loggedUser"] == null || Session["loggedToken"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            return View();
+        }
+
+        public ActionResult ContentUpload()
+        {
+            //Check session
+            if (Session["loggedUser"] == null || Session["loggedToken"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            return View();
+        }
     }
 }

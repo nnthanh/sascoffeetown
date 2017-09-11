@@ -56,33 +56,45 @@
     });
 
     document.getElementById("submitBtn").onclick = function () {
-        $('#loader').show();
-        $(':button').prop('disabled', true);
-        var vurl = 'http://35.185.147.78/sas/sas_server/admin/checkin/' + $('#mathanhvien').val() + '/' + '@Session["loggedToken"].ToString()';
 
-        $.ajax({
-            type: 'GET',
-            url: vurl,
-            success: function (resp) {
-                if (resp.statuskey == true) {
-                    $(':button').prop('disabled', false);
-                    swal(
-                        'Thành công',
-                        resp.message,
-                        'success'
-                    );
-                } else {
-                    swal(
-                        'Thất bại',
-                        resp.message,
-                        'error'
-                    );
-                    $(':button').prop('disabled', false);
-                }
-                $('#loader').hide();
-            },
-            dataType: 'json',
-            contentType: 'application/json; charset=utf-8'
-        });
+        if ($('#mathanhvien').val() != '') {
+            $('#loader').show();
+            $(':button').prop('disabled', true);
+            var vurl = 'http://35.185.147.78/sas/sas_server/admin/checkin/' + $('#mathanhvien').val() + '/' + '@Session["loggedToken"].ToString()';
+
+            $.ajax({
+                type: 'GET',
+                url: vurl,
+                success: function (resp) {
+                    if (resp.statuskey == true) {
+                        $(':button').prop('disabled', false);
+                        swal(
+                            'Thành công',
+                            resp.message,
+                            'success'
+                        );
+                    } else {
+                        swal(
+                            'Thất bại',
+                            resp.message,
+                            'error'
+                        );
+                        $(':button').prop('disabled', false);
+                    }
+                    $('#loader').hide();
+                },
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8'
+            });
+        }
+        else {
+            swal(
+                'Lỗi',
+                'Không thể bỏ trống mã thành viên',
+                'error'
+            );
+            $(':button').prop('disabled', false);
+        }
+
     };
 </script>

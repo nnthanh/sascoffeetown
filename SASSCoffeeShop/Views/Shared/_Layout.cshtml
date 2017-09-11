@@ -27,6 +27,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.5/sweetalert2.min.css">
     <!--Loader-->
     <link rel="stylesheet" href="~/Content/css/loader.css">
+    <!--Loader-->
+    <link rel="stylesheet" href="~/Content/css/redloader.css">
 
     <!-- jQuery -->
     <script src="~/Content/vendors/jquery/dist/jquery.min.js"></script>
@@ -36,10 +38,18 @@
     <!-- bootstrap-daterangepicker -->
     <script src="~/Content/js/moment/moment.min.js"></script>
     <script src="~/Content/js/datepicker/daterangepicker.js"></script>
+    <!-- Datatables -->
+    <link href="~/Content/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
 
+    <style>
+        img.resize {
+            width:200px; /* you can use % */
+            height: auto;
+        }
+    </style>
 </head>
 <body>
-    <div class="loader-body" hidden id="loader">
+    @*<div class="loader-body" hidden id="loader">
         <div id="circle_container" style="opacity:1;">
             <div id="stars"></div>
             <div id="load_wrapper">
@@ -48,194 +58,227 @@
             </div>
         </div>
         <h1 id="loading_text">Loading</h1>
-    </div>
+    </div>*@
 
-    <div class="wrapper">
-        <div class="sidebar" data-background-color="white" data-active-color="info">
-            <!--
-                Tip 1: you can change the color of the sidebar's background using: data-background-color="white | black"
-                Tip 2: you can change the color of the active button using the data-active-color="primary | info | success | warning | danger"
-            -->
-            <div class="sidebar-wrapper">
-                @*<div class="logo">
-                    <a href="http://www.creative-tim.com" class="simple-text">
-                        SAS Coffee Town
-                    </a>
-                </div>*@
-                <div class="logo">
-                    <a href="#" class="simple-text">
-                        <div class="logo-img"><img src="~/Content/img/logo.png" alt=""></div>
-                        SAS Coffee Town
-                    </a>
-                </div>
-                <ul class="nav" id="tabpanel">
-                    <li id="tabpanel-1">
-                        <a href='@Url.Action("UpgradeMembership","Home")'>
-                            <i class="ti-angle-double-up"></i>
-                            <p>Nâng cấp thành viên</p>
-                        </a>
-                    </li>
-                    <li id="tabpanel-2">
-                        <a href='@Url.Action("CheckIn","Home")'>
-                            <i class="ti-location-pin"></i> 
-                            <p>Check-in</p>
-                        </a>
-                    </li>
-                    <li id="tabpanel-3">
-                        <a href='@Url.Action("SplashNews","Home")'>
-                            <i class="ti-bell"></i>
-                            <p>Splash news</p>
-                        </a>
-                    </li>
-                    <li id="tabpanel-4">
-                        <a href='@Url.Action("Event","Home")'>
-                            <i class="ti-gift"></i>
-                            <p>Event</p>
-                        </a>
-                    </li>
-                    <li id="tabpanel-5">
-                        <a href='@Url.Action("Branch","Home")'>
-                            <i class="ti-home"></i>
-                            <p>Cửa hàng</p>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="main-panel">
-            <nav class="navbar navbar-default">
-                <div class="container-fluid">
-                    <div class="navbar-header">
-                        <a class="navbar-brand" href="#" id="brand"></a>
-                    </div>
-                    <div class="collapse navbar-collapse">
-                        <ul class="nav navbar-nav navbar-right">
-                            <li>
-                                <a href="@Url.Action("Logout", null, new { area = string.Empty, controller = "Account" }, Request.Url.Scheme)">
-                                    <i class="ti-shift-right-alt"></i>
-                                    <p>Log out</p>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>  
-                </div>
-            </nav>
-                
-
-            <div class="content">
-                <div class="container-fluid">
-                    <div class="row">
-                        @RenderBody()
-                        <hr />
-                    </div>
-                </div>
-            </div>
-
-            <footer class="footer">
-                <div class="container-fluid">
-                    <nav class="pull-left">
-                        <ul>
-                            <li>
-                                <a href="#">
-                                    Home
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                    <div class="copyright pull-right">
-                        &copy;
-                        <script>document.write(new Date().getFullYear())</script>, made with <i class="fa fa-heart heart"></i> by <a href="https://www.facebook.com/ngthanh95">Ngoc Thanh</a>
-                    </div>
-                </div>
-            </footer>
+    <div class="loader-background" hidden id="loader">
+        <div class="loader">
+            <div class="loader__figure"></div>
+            <p class="loader__label">LOADING</p>
         </div>
     </div>
+        <div class="wrapper">
+            <div class="sidebar" data-background-color="white" data-active-color="info">
+                <!--
+                    Tip 1: you can change the color of the sidebar's background using: data-background-color="white | black"
+                    Tip 2: you can change the color of the active button using the data-active-color="primary | info | success | warning | danger"
+                -->
+                <div class="sidebar-wrapper">
+                    @*<div class="logo">
+                            <a href="http://www.creative-tim.com" class="simple-text">
+                                SAS Coffee Town
+                            </a>
+                        </div>*@
+                    <div class="logo">
+                        <a href="#" class="simple-text">
+                            <div class="logo-img"><img src="~/Content/img/logo.png" alt=""></div>
+                            SAS Coffee Town
+                        </a>
+                    </div>
+                    <ul class="nav" id="tabpanel">
+                        <li id="tabpanel-1">
+                            <a href='@Url.Action("UpgradeMembership","Home")'>
+                                <i class="ti-angle-double-up"></i>
+                                <p>Nâng cấp thành viên</p>
+                            </a>
+                        </li>
+                        <li id="tabpanel-2">
+                            <a href='@Url.Action("CheckIn","Home")'>
+                                <i class="ti-map-alt"></i>
+                                <p>Check-in</p>
+                            </a>
+                        </li>
+                        <li id="tabpanel-3">
+                            <a href='@Url.Action("SplashNews","Home")'>
+                                <i class="ti-bell"></i>
+                                <p>Splash news</p>
+                            </a>
+                        </li>
+                        <li id="tabpanel-4">
+                            <a href='@Url.Action("Event","Home")'>
+                                <i class="ti-gift"></i>
+                                <p>Event</p>
+                            </a>
+                        </li>
+                        <li id="tabpanel-5">
+                            <a href='@Url.Action("Branch","Home")'>
+                                <i class="ti-home"></i>
+                                <p>Cửa hàng</p>
+                            </a>
+                        </li>
+                        <li id="tabpanel-6">
+                            <a href='@Url.Action("EventList","Home")'>
+                                <i class="ti-view-list-alt"></i>
+                                <p>Event list</p>
+                            </a>
+                        </li>
+                        <li id="tabpanel-7">
+                            <a href='@Url.Action("ContentUpload","Home")'>
+                                <i class="ti-export"></i>
+                                <p>Content upload</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="main-panel">
+                <nav class="navbar navbar-default">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <a class="navbar-brand" href="#" id="brand"></a>
+                        </div>
+                        <div class="collapse navbar-collapse">
+                            <ul class="nav navbar-nav navbar-right">
+                                <li>
+                                    <a href="@Url.Action("Logout", null, new { area = string.Empty, controller = "Account" }, Request.Url.Scheme)">
+                                        <i class="ti-shift-right-alt"></i>
+                                        <p>Log out</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
 
 
-    <!--   Core JS Files   -->
-    @*<script src="~/Content/js/jquery-1.10.2.js" type="text/javascript"></script>*@
-    <script src="~/Content/js/bootstrap.min.js" type="text/javascript"></script>
-    <!--  Checkbox, Radio & Switch Plugins -->
-    <script src="~/Content/js/bootstrap-checkbox-radio.js"></script>
-    <!--  Charts Plugin -->
-    <script src="~/Content/js/chartist.min.js"></script>
-    <!--  Notifications Plugin    -->
-    <script src="~/Content/js/bootstrap-notify.js"></script>
-    <!--  Google Maps Plugin    -->
-    @*<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>*@
-    <!-- Paper Dashboard Core javascript and methods for Demo purpose -->
-    <script src="~/Content/js/paper-dashboard.js"></script>
-    <!-- Paper Dashboard DEMO methods, don't include it in your project! -->
-    <script src="~/Content/js/demo.js"></script>
 
-    <script type="text/javascript">
-        //var PORT = '35.185.147.78';
-        $(document).ready(function () {
-         
-            $('#tabpanel-1').removeClass('active');
-            $('#tabpanel-2').removeClass('active');
-            $('#tabpanel-3').removeClass('active');
-            $('#tabpanel-4').removeClass('active');
-            $('#tabpanel-5').removeClass('active');
+                <div class="content">
+                    <div class="container-fluid">
+                        <div class="row">
+                            @RenderBody()
+                            <hr />
+                        </div>
+                    </div>
+                </div>
 
-            if ($('#brand').text().trim() == 'Nâng cấp thành viên') {
-                $('#tabpanel-1').addClass('active');
-            }
-            if ($('#brand').text().trim() == 'Check in') {
-                $('#tabpanel-2').addClass('active');
-            }
-            if ($('#brand').text().trim() == 'Splash News') {
-                $('#tabpanel-3').addClass('active');
-            }
-            if ($('#brand').text().trim() == 'Event') {
-                $('#tabpanel-4').addClass('active');
-            }
-            if ($('#brand').text().trim() == 'Cửa hàng') {
-                $('#tabpanel-5').addClass('active');
-            }
-    	});
-    </script>
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <nav class="pull-left">
+                            <ul>
+                                <li>
+                                    <a href='@Url.Action("UpgradeMembership","Home")'>
+                                        Home
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                        <div class="copyright pull-right">
+                            &copy;
+                            <script>document.write(new Date().getFullYear())</script>, made with <i class="fa fa-heart heart"></i> by <a href="https://www.facebook.com/ngthanh95">Ngoc Thanh</a>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
 
-    <!-- bootstrap-daterangepicker -->
-    <script>
-        $(document).ready(function () {
-            $('#eventDate').daterangepicker({
-                singleDatePicker: true,
-                calender_style: "picker_3"
-            }, function (start, end, label) {
-                console.log(start.toISOString(), end.toISOString(), label);
+        <!--  Global Variables -->
+        <script src="~/Content/js/globvars.js"></script>
+        <!--   Core JS Files   -->
+        @*<script src="~/Content/js/jquery-1.10.2.js" type="text/javascript"></script>*@
+        <script src="~/Content/js/bootstrap.min.js" type="text/javascript"></script>
+        <!--  Checkbox, Radio & Switch Plugins -->
+        <script src="~/Content/js/bootstrap-checkbox-radio.js"></script>
+        <!--  Charts Plugin -->
+        <script src="~/Content/js/chartist.min.js"></script>
+        <!--  Notifications Plugin    -->
+        <script src="~/Content/js/bootstrap-notify.js"></script>
+        <!--  Google Maps Plugin    -->
+        @*<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>*@
+        <!-- Paper Dashboard Core javascript and methods for Demo purpose -->
+        <script src="~/Content/js/paper-dashboard.js"></script>
+        <!-- Paper Dashboard DEMO methods, don't include it in your project! -->
+        <script src="~/Content/js/demo.js"></script>
+        <!-- Datatables -->
+        <script src="~/Content/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+        <script src="~/Content/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+
+
+        <script type="text/javascript">
+            //var PORT = '35.185.147.78';
+            $(document).ready(function () {
+
+                $('#tabpanel-1').removeClass('active');
+                $('#tabpanel-2').removeClass('active');
+                $('#tabpanel-3').removeClass('active');
+                $('#tabpanel-4').removeClass('active');
+                $('#tabpanel-5').removeClass('active');
+                $('#tabpanel-6').removeClass('active');
+                $('#tabpanel-7').removeClass('active');
+
+                if ($('#brand').text().trim() == 'Nâng cấp thành viên') {
+                    $('#tabpanel-1').addClass('active');
+                }
+                if ($('#brand').text().trim() == 'Check in') {
+                    $('#tabpanel-2').addClass('active');
+                }
+                if ($('#brand').text().trim() == 'Splash News') {
+                    $('#tabpanel-3').addClass('active');
+                }
+                if ($('#brand').text().trim() == 'Event') {
+                    $('#tabpanel-4').addClass('active');
+                }
+                if ($('#brand').text().trim() == 'Cửa hàng') {
+                    $('#tabpanel-5').addClass('active');
+                }
+                if ($('#brand').text().trim() == 'Event list') {
+                    $('#tabpanel-6').addClass('active');
+                }
+                if ($('#brand').text().trim() == 'Content upload') {
+                    $('#tabpanel-7').addClass('active');
+                }
             });
-        });
-    </script>
+        </script>
 
-    <!-- loader-->
-    <script>
-        function getRandom(size) {
-            return Math.floor(Math.random() * size);
-        }
-
-        //Creating the layers for the stars
-        for (i = 2; i < 12; i++) {
-            $("#stars").append('<div class="star_layer" style="transform: translateZ(' + i + 'px) scale(' + (15 - i) / (15) + ');"></div>')
-        }
-
-        //Creating the stars
-        for (i = 0; i < 70; i++) {
-            $(".star_layer").eq(getRandom(10)).append('<div class="star"></div>');
-        }
-
-        updateStars();
-
-        //Change stars every cycle
-        setInterval(updateStars, 4000);
-
-        //Randomising stars. Position and opacity is changed every cycle.
-        function updateStars() {
-            $(".star").each(function () {
-                $(this).css({ "top": getRandom(200) + "px", "left": getRandom(200) + "px", "opacity": (20 + getRandom(50)) / 100 });
+        <!-- bootstrap-daterangepicker -->
+        <script>
+            $(document).ready(function () {
+                $('#eventDate').daterangepicker({
+                    singleDatePicker: true,
+                    calender_style: "picker_3"
+                }, function (start, end, label) {
+                    console.log(start.toISOString(), end.toISOString(), label);
+                });
             });
-        }
-    </script>
-    @RenderSection("scripts", required: false)
+        </script>
+
+        <!-- loader-->
+        <script>
+            function getRandom(size) {
+                return Math.floor(Math.random() * size);
+            }
+
+            //Creating the layers for the stars
+            for (i = 2; i < 12; i++) {
+                $("#stars").append('<div class="star_layer" style="transform: translateZ(' + i + 'px) scale(' + (15 - i) / (15) + ');"></div>')
+            }
+
+            //Creating the stars
+            for (i = 0; i < 70; i++) {
+                $(".star_layer").eq(getRandom(10)).append('<div class="star"></div>');
+            }
+
+            updateStars();
+
+            //Change stars every cycle
+            setInterval(updateStars, 4000);
+
+            //Randomising stars. Position and opacity is changed every cycle.
+            function updateStars() {
+                $(".star").each(function () {
+                    $(this).css({ "top": getRandom(200) + "px", "left": getRandom(200) + "px", "opacity": (20 + getRandom(50)) / 100 });
+                });
+            }
+        </script>
+
+        @RenderSection("scripts", required: false)
 </body>
 </html>

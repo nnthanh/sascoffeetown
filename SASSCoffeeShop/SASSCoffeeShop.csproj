@@ -269,6 +269,8 @@
     <Content Include="Views\Home\SplashNews.cshtml" />
     <Content Include="Views\Home\Event.cshtml" />
     <Content Include="Views\Home\Branch.cshtml" />
+    <Content Include="Views\Home\EventList.cshtml" />
+    <Content Include="Views\Home\ContentUpload.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

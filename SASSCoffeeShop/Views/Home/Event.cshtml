@@ -167,7 +167,7 @@
                                             <div class="btn-group">
                                                 <a class="btn" data-edit="unlink" title="" data-original-title="Remove Hyperlink"><i class="fa fa-cut"></i></a>
                                                 <a class="btn" title="" id="pictureBtn" data-original-title="Insert picture (or just drag &amp; drop)"><i class="fa fa-picture-o"></i></a>
-                                                <input type="file" data-role="magic-overlay" data-target="#pictureBtn" data-edit="insertImage" style="opacity: 0; position: absolute; top: 0px; left: 0px; width: 37px; height: 34px;">
+                                                <input type="file" data-role="magic-overlay" data-target="#pictureBtn" @*data-edit="insertImage"*@ onchange="cropper(event)">
                                             </div>
                                             <div class="btn-group">
                                                 <a class="btn" data-edit="undo" title="" data-original-title="Undo (Ctrl/Cmd+Z)"><i class="fa fa-undo"></i></a>
@@ -207,6 +207,30 @@
 <script>
     $('#brand').text('Event');
     var branchid = 0;
+    function cropper(event) {
+        selectedImg = event.target.files;
+        if (selectedImg != null) {
+            for (var i = 0; i < selectedImg.length; i++) {
+                var file = selectedImg[i];
+                var imageType = /^image\//;
+
+                if (!imageType.test(file.type)) {
+                    continue;
+                }
+
+                var img = document.createElement("img");
+                img.classList.add("resize");
+                img.file = file;
+
+                var preview = document.getElementById('editor');
+                preview.appendChild(img); // Assuming that "preview" is the div output where the content will be displayed.
+                
+                var reader = new FileReader();
+                reader.onload = (function (aImg) { return function (e) { aImg.src = e.target.result; }; })(img);
+                reader.readAsDataURL(file);
+            }
+        }
+    };
     $(document).ready(function () {
         $.ajax({
             type: 'GET',
@@ -230,6 +254,13 @@
             dataType: 'json',
             contentType: 'application/json; charset=utf-8'
         });
+
+        $(function () {
+            $('#editor img').load(function () {
+                var $img = $(this);
+                $img.attr('width', $img.width()).attr('height', $img.height());
+            });
+        });
     });
 
     function branchOnChange(value, id) {
@@ -247,11 +278,11 @@
         return this.slice(0, idx) + str + this.slice(idx + Math.abs(rem));
     };
 
-    $(document).keypress(function (e) {
-        if (e.which == 13) {
-            $('#submitBtn').click();
-        }
-    });
+    //$(document).keypress(function (e) {
+    //    if (e.which == 13) {
+    //        $('#submitBtn').click();
+    //    }
+    //});
 
     document.getElementById("submitBtn").onclick = function () {
         $('#loader').show();
@@ -345,6 +376,7 @@
             var overlay = $(this),
               target = $(overlay.data('target'));
             overlay.css('opacity', 0).css('position', 'absolute').offset(target.offset()).width(target.outerWidth()).height(target.outerHeight());
+            //overlay.attr('width', $img.width()).attr('height', $img.height());
           });
 
           if ("onwebkitspeechchange" in document.createElement("input")) {
