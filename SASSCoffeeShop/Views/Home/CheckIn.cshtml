@@ -60,7 +60,7 @@
         if ($('#mathanhvien').val() != '') {
             $('#loader').show();
             $(':button').prop('disabled', true);
-            var vurl = 'http://35.185.147.78/sas/sas_server/admin/checkin/' + $('#mathanhvien').val() + '/' + '@Session["loggedToken"].ToString()';
+            var vurl = 'http://'+ PORT +'/sas/sas_server/admin/checkin/' + $('#mathanhvien').val() + '/' + '@Session["loggedToken"].ToString()';
 
             $.ajax({
                 type: 'GET',

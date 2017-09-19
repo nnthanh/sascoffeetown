@@ -68,7 +68,7 @@
 
                         <!--Table dynamic-->
                         <div class="x_panel" style="padding:20px">
-                            <h4>Topics <a onclick="$('#addTopicForm').show();" class="fa fa-plus" style="cursor:pointer"></a></h4> 
+                            <h4>Topics <a id="addTopicBtnA" onclick="$('#addTopicForm').show(500); $('#addTopicBtnA').hide(500);" class="fa fa-plus" style="cursor:pointer"></a></h4> 
                             <div class="row" hidden id="addTopicForm">
                                 <div class="col-md-5">
                                     <div class="typo-line">
@@ -87,6 +87,7 @@
                                     </div>
                                 </div>
                                 <button class="btn btn-success" style="display:inline-block" id="addTopicBtn">Add topic</button>
+                                <a onclick="$('#addTopicForm').hide(500); clearTopicInput(); $('#addTopicBtnA').show(500);" class="fa fa-close" style="cursor:pointer;color:red;"></a>
                             </div>
                             
                             @*<hr />*@
@@ -117,10 +118,10 @@
             <div class="button close"><i class="fa fa-close"></i></div>
 
             <div class="modal-body" style="max-height:calc(100vh - 210px);overflow-y:auto;">
-                <h3>Sentences <a onclick="$('#addSentenceForm').show();" class="fa fa-plus" style="cursor:pointer"></a></h3>
+                <h3>Sentences <a id="addSentenceBtnA" onclick="$('#addSentenceForm').show(500); $('#addSentenceBtnA').hide(500);" class="fa fa-plus" style="cursor:pointer"></a></h3>
 
                 <div class="row" hidden id="addSentenceForm">
-                    <div class="col-md-5">
+                    <div class="col-md-12">
                         <div class="typo-line">
                             <div class="form-group">
                                 <p class="category">English</p>
@@ -128,7 +129,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-12">
                         <div class="typo-line">
                             <div class="form-group">
                                 <p class="category">Vietnamese</p>
@@ -137,8 +138,9 @@
                         </div>
                     </div>
                     <button class="btn btn-success" style="display:inline-block" id="addSentenceBtn">Add sentence</button>
+                    <a onclick="$('#addSentenceForm').hide(500); clearSentenceInput(); $('#addSentenceBtnA').show(500);" class="fa fa-close" style="cursor:pointer;color:red;"></a>
                 </div>
-               
+               <br />
                 <table id="modaltable" class="table table-striped table-bordered dataTable no-footer" role="grid" aria-describedby="datatable_info">
                     <thead>
                         <tr>
@@ -158,11 +160,37 @@
     var currentTopic;
     $('#brand').text('Content upload');
 
+    function clearTopicInput() {
+        $('#topicEng').text('');
+        $('#topicEng').val('');
+        $('#topicVi').text('');
+        $('#topicVi').val('');
+    };
+
+    function clearSentenceInput() {
+        $('#topicEng').text('');
+        $('#topicEng').val('');
+        $('#topicVi').text('');
+        $('#topicVi').val('');
+    };
+
     $(document).ready(function () {
+
+        //$('#overlay').click(function (e) {
+        //    e.preventDefault();
+        //    $('#overlay').fadeOut(400, function () {
+        //        $overlay.removeClass('state-show');
+        //        $modal.removeClass('state-appear').addClass('state-leave');
+        //    });
+
+        //    //$overlay.removeClass('state-show');
+        //    //$modal.removeClass('state-appear').addClass('state-leave');
+        //});
+
         $('#datatable').dataTable();
         $.ajax({
             type: 'GET',
-            url: 'http://35.185.147.78/sas/sas_server/study/conversation/listName',
+            url: 'http://'+ PORT +'/sas/sas_server/study/conversation/listName',
             success: function (resp) {
                 if (resp.statuskey == true) {
                     var oTable = $('#datatable').dataTable();
@@ -189,13 +217,26 @@
                 currentTopic = table.row(this).data()[2];
                 $.ajax({
                     type: 'GET',
-                    url: 'http://35.185.147.78/sas/sas_server/study/conversation/' + table.row(this).data()[2],
+                    url: 'http://'+ PORT +'/sas/sas_server/study/conversation/' + table.row(this).data()[2],
                     success: function (resp) {
                         if (resp.statuskey == true) {
                             var oTable = $('#modaltable').dataTable();
                             oTable.fnClearTable();
 
                             resp.sentences.forEach(addModalTable);
+
+                            $.notify({
+                                icon: 'ti-bookmark',
+                                message: "Press x or Escape button to close modal."
+
+                            }, {
+                                type: 'danger',
+                                timer: 4000,
+                                placement: {
+                                    from: 'top',
+                                    align: 'left'
+                                }
+                            });
                         } else {
                             swal(
                                 'Thất bại',
@@ -221,6 +262,21 @@
             }
         });
 
+        //$('body').on('click', function () {
+        //    if (($overlay.hasClass('state-show') == true)) {
+        //        $overlay.removeClass('state-show');
+        //        $modal.removeClass('state-appear').addClass('state-leave');
+        //    }
+        //});
+
+        //$('.modal-footer').on('click', function () {
+        //    $overlay.removeClass('state-show');
+        //    $modal.removeClass('state-appear').addClass('state-leave');
+        //});
+
+        //$('.modal').on('click', function (e) {
+        //    e.stopPropagation();
+        //});
     });
 
     function addTableData(item, index) {
@@ -250,7 +306,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: 'http://35.185.147.78/sas/sas_server/admin/addVideo/' + '@Session["loggedToken"].ToString()',
+                url: 'http://'+ PORT +'/sas/sas_server/admin/addVideo/' + '@Session["loggedToken"].ToString()',
                 data: JSON.stringify(res),
                 success: function (resp) {
                     if (resp.statuskey == true) {
@@ -300,7 +356,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: 'http://35.185.147.78/sas/sas_server/admin/addTopic/' + '@Session["loggedToken"].ToString()',
+                url: 'http://'+ PORT +'/sas/sas_server/admin/addTopic/' + '@Session["loggedToken"].ToString()',
                 data: JSON.stringify(res),
                 success: function (resp) {
                     if (resp.statuskey == true) {
@@ -312,6 +368,7 @@
                         );
                         $('#addTopicForm').fadeOut(2000);
                         $('#loader').hide();
+                        clearTopicInput();
                     } else {
                         swal(
                             'Thất bại',
@@ -351,7 +408,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: 'http://35.185.147.78/sas/sas_server/admin/topic/' + currentTopic +'/addSentence/' + '@Session["loggedToken"].ToString()',
+                url: 'http://'+ PORT +'/sas/sas_server/admin/topic/' + currentTopic +'/addSentence/' + '@Session["loggedToken"].ToString()',
                 data: JSON.stringify(res),
                 success: function (resp) {
                     if (resp.statuskey == true) {
@@ -362,6 +419,7 @@
                             'success'
                         );
                         $('#loader').hide();
+                        clearSentenceInput();
                     } else {
                         swal(
                             'Thất bại',

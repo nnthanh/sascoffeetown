@@ -214,7 +214,7 @@
 
         $.ajax({
             type: 'GET',
-            url: 'http://35.185.147.78/sas/sas_server/branch/getAll',
+            url: 'http://'+ PORT +'/sas/sas_server/branch/getAll',
             success: function (resp) {
                 if (resp.statuskey == true) {
 
@@ -295,7 +295,7 @@
         };
         $.ajax({
             type: 'POST',
-            url: 'http://35.185.147.78/sas/sas_server/admin/editBranch/' + '@Session["loggedToken"].ToString()',
+            url: 'http://'+ PORT +'/sas/sas_server/admin/editBranch/' + '@Session["loggedToken"].ToString()',
             data: JSON.stringify(res),
             success: function (resp) {
                 if (resp.statuskey == true) {
@@ -338,7 +338,7 @@
 
         $.ajax({
             type: 'POST',
-            url: 'http://35.185.147.78/sas/sas_server/admin/addBranch/' + '@Session["loggedToken"].ToString()',
+            url: 'http://'+ PORT +'/sas/sas_server/admin/addBranch/' + '@Session["loggedToken"].ToString()',
             data: JSON.stringify(res),
             success: function (resp) {
                 if (resp.statuskey == true) {

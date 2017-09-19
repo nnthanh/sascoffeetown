@@ -13,6 +13,8 @@ var URL = window.location.href.split('?')[0],
     $RIGHT_COL = $('.right_col'),
     $NAV_MENU = $('.nav_menu'),
     $FOOTER = $('footer');
+	
+var PORT = '35.201.131.125';
 
 // Sidebar
 $(document).ready(function() {

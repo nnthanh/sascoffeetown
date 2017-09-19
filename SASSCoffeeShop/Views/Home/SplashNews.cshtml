@@ -186,7 +186,7 @@
         //call G
         $.ajax({
             type: 'GET',
-            url: 'http://35.185.147.78/sas/sas_server/user/getNews/G',
+            url: 'http://'+ PORT +'/sas/sas_server/user/getNews/G',
             success: function (resp) {
                 if (resp.statuskey == true) {
                     $(':button').prop('disabled', false);
@@ -208,7 +208,7 @@
         //call T
         $.ajax({
             type: 'GET',
-            url: 'http://35.185.147.78/sas/sas_server/user/getNews/T',
+            url: 'http://'+ PORT +'/sas/sas_server/user/getNews/T',
             success: function (resp) {
                 if (resp.statuskey == true) {
                     $(':button').prop('disabled', false);
@@ -230,7 +230,7 @@
         //call S
         $.ajax({
             type: 'GET',
-            url: 'http://35.185.147.78/sas/sas_server/user/getNews/S',
+            url: 'http://'+ PORT +'/sas/sas_server/user/getNews/S',
             success: function (resp) {
                 if (resp.statuskey == true) {
                     $(':button').prop('disabled', false);
@@ -254,7 +254,7 @@
     document.getElementById("submitBtn").onclick = function () {
         $('#loader').show();
         $(':button').prop('disabled', true);
-        var vurl = 'http://35.185.147.78/sas/sas_server/admin/updateSplashNews/' + '@Session["loggedToken"].ToString()';
+        var vurl = 'http://'+ PORT +'/sas/sas_server/admin/updateSplashNews/' + '@Session["loggedToken"].ToString()';
 
         var res_g = {
             userType: "G",

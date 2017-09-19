@@ -71,7 +71,7 @@
                             <div class="col-md-5">
                                 <div class="typo-line">
                                     <div class="form-group">
-                                        <p class="category">Discount</p>
+                                        <p class="category">Discount (%)</p>
                                         <input class="form-control border-input" type="text" id="discount" maxlength="3" onkeypress='return event.charCode >= 48 && event.charCode <= 57' required />
                                     </div>
                                 </div>
@@ -79,11 +79,12 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-5">
+                            <div class="col-sm-6 col-md-5 offset-md-2 col-lg-6 offset-lg-0">
                                 <div class="typo-line">
                                     <div class="form-group">
                                         <p class="category">Brief Description</p>
-                                        <input class="form-control border-input" type="text" id="briefDescription" required />
+                                        @*<input class="form-control border-input" type="text" id="briefDescription" required />*@
+                                        <textarea rows="3" class="form-control border-input" type="text" id="briefDescription" required></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -335,7 +336,7 @@
     $(document).ready(function () {
         $.ajax({
             type: 'GET',
-            url: 'http://35.185.147.78/sas/sas_server/branch/getAll',
+            url: 'http://'+ PORT +'/sas/sas_server/branch/getAll',
             success: function (resp) {
                 if (resp.statuskey == true) {
                     
@@ -388,7 +389,7 @@
     document.getElementById("submitBtn").onclick = function () {
         $('#loader').show();
         $(':button').prop('disabled', true);
-        var vurl = 'http://35.185.147.78/sas/sas_server/admin/event/create/' + '@Session["loggedToken"].ToString()';
+        var vurl = 'http://'+ PORT +'/sas/sas_server/admin/event/create/' + '@Session["loggedToken"].ToString()';
 
         var temp = new Date($('#eventdate').val()).toDateString();
         //temp = 

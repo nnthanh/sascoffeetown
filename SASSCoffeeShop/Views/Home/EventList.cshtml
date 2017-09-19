@@ -97,7 +97,7 @@
         $('#datatable').dataTable();
         $.ajax({
             type: 'GET',
-            url: 'http://35.185.147.78/sas/sas_server/branch/getAll',
+            url: 'http://'+ PORT +'/sas/sas_server/branch/getAll',
             success: function (resp) {
                 if (resp.statuskey == true) {
 
@@ -123,13 +123,26 @@
             if (table.row(this).data()[3] != null) {
                 $.ajax({
                     type: 'GET',
-                    url: 'http://35.185.147.78/sas/sas_server/promo/event/' + table.row(this).data()[3] + '/members',
+                    url: 'http://'+ PORT +'/sas/sas_server/promo/event/' + table.row(this).data()[3] + '/members',
                     success: function (resp) {
                         if (resp.statuskey == true) {
                             var oTable = $('#modaltable').dataTable();
                             oTable.fnClearTable();
 
                             resp.members.forEach(addModalTable);
+
+                            $.notify({
+                                icon: 'ti-bookmark',
+                                message: "Press x or Escape button to close modal."
+
+                            }, {
+                                type: 'danger',
+                                timer: 4000,
+                                placement: {
+                                    from: 'top',
+                                    align: 'left'
+                                }
+                            });
                         } else {
                             swal(
                                 'Thất bại',
@@ -163,7 +176,7 @@
 
         $.ajax({
             type: 'GET',
-            url: 'http://35.185.147.78/sas/sas_server/promo/branch/' + branchid,
+            url: 'http://'+ PORT +'/sas/sas_server/promo/branch/' + branchid,
             success: function (resp) {
                 if (resp.statuskey == true) {
                     var oTable = $('#datatable').dataTable();

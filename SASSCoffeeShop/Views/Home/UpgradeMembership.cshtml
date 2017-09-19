@@ -80,7 +80,7 @@
 
         $.ajax({
             type: 'GET',
-            url: 'http://35.185.147.78/sas/sas_server/branch/getAll',
+            url: 'http://'+ PORT +'/sas/sas_server/branch/getAll',
             success: function (resp) {
                 if (resp.statuskey == true) {
 
@@ -139,9 +139,9 @@
         var vurl;
 
         if ($('#giangvien').hasClass('active')) {
-            vurl = 'http://35.185.147.78/sas/sas_server/admin/upgradeTeacher/' + branchid + '/' + $('#mathanhvien').val() +'/'+ '@Session["loggedToken"].ToString()';
+            vurl = 'http://'+ PORT +'/sas/sas_server/admin/upgradeTeacher/' + branchid + '/' + $('#mathanhvien').val() +'/'+ '@Session["loggedToken"].ToString()';
         } else {
-            vurl = 'http://35.185.147.78/sas/sas_server/admin/upgradeStudent/' + branchid + '/' + $('#mathanhvien').val() + '/' + '@Session["loggedToken"].ToString()';
+            vurl = 'http://'+ PORT +'/sas/sas_server/admin/upgradeStudent/' + branchid + '/' + $('#mathanhvien').val() + '/' + '@Session["loggedToken"].ToString()';
         }
         $.ajax({
             type: 'GET',
