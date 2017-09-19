@@ -260,6 +260,7 @@
                             resp.message,
                             'success'
                         );
+                        $('#loader').hide();
                     } else {
                         swal(
                             'Thất bại',
@@ -267,9 +268,10 @@
                             'error'
                         );
                         $(':button').prop('disabled', false);
+                        $('#loader').hide();
                     }
 
-                    $('#loader').hide();
+                    //$('#loader').hide();
                 },
                 dataType: 'json',
                 contentType: 'application/json; charset=utf-8'
@@ -309,6 +311,7 @@
                             'success'
                         );
                         $('#addTopicForm').fadeOut(2000);
+                        $('#loader').hide();
                     } else {
                         swal(
                             'Thất bại',
@@ -316,9 +319,10 @@
                             'error'
                         );
                         $(':button').prop('disabled', false);
+                        $('#loader').hide();
                     }
 
-                    $('#loader').hide();
+                    //$('#loader').hide();
                 },
                 dataType: 'json',
                 contentType: 'application/json; charset=utf-8'
@@ -357,6 +361,7 @@
                             resp.message,
                             'success'
                         );
+                        $('#loader').hide();
                     } else {
                         swal(
                             'Thất bại',
@@ -364,9 +369,10 @@
                             'error'
                         );
                         $(':button').prop('disabled', false);
+                        $('#loader').hide();
                     }
 
-                    $('#loader').hide();
+                    //$('#loader').hide();
                 },
                 dataType: 'json',
                 contentType: 'application/json; charset=utf-8'

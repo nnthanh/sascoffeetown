@@ -348,10 +348,11 @@
                     );
                     $(':button').prop('disabled', false);
                 }
+                $('#loader').hide();
             },
             dataType: 'json',
             contentType: 'application/json; charset=utf-8'
         });
-        $('#loader').hide();
+        //$('#loader').hide();
     };
 </script>
