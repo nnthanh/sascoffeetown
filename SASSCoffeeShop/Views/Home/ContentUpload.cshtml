@@ -363,8 +363,9 @@
                         'Thành công',
                         resp.message,
                         'success'
-                    );
-                    $(':button').prop('disabled', false);
+                    ).then(function () {
+                        location.reload();
+                        })
                 } else {
                     swal(
                         'Thất bại',
@@ -419,8 +420,10 @@
                             'Thành công',
                             resp.message,
                             'success'
-                        );
-                        $('#loader').hide();
+                        ).then(function () {
+                            $('#loader').hide();
+                            location.reload(2000);
+                        })
                     } else {
                         swal(
                             'Thất bại',
@@ -469,10 +472,13 @@
                             'Thành công',
                             resp.message,
                             'success'
-                        );
-                        $('#addTopicForm').fadeOut(2000);
-                        $('#loader').hide();
-                        clearTopicInput();
+                        ).then(function () {
+                            $('#addTopicForm').fadeOut(2000);
+                            $('#loader').hide();
+                            clearTopicInput();
+                            location.reload(2000);
+                        })
+                        
                     } else {
                         swal(
                             'Thất bại',

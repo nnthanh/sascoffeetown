@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="~/Content/css/login.css">
     <link rel="stylesheet" href="~/Content/css/loginloader.css">
     <link href='https://fonts.googleapis.com/css?family=Ubuntu:400,300' rel='stylesheet' type='text/css'>
+    <!-- Global vars -->
+    <script src="~/Content/js/globvars.js"></script>
 </head>
 <body>
     <div class="loader" hidden id="myloader">
@@ -62,7 +64,7 @@
 		    $.ajax({
 		        type: 'POST',
 		        async: true,
-		        url: 'http://35.185.147.78/sas/sas_server/admin/authenticate',
+                url: 'http://' + PORT + '/sas/sas_server/admin/authenticate',
 		        data: JSON.stringify(res),
 		        success: function (resp) {
 		            if (resp.statuskey == true) {
