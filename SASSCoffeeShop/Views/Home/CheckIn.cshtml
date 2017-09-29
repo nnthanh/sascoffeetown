@@ -43,10 +43,10 @@
 
     $('#mathanhvien').keyup(function () {
         var $th = $(this);
-        $th.val($th.val().replace(/[^(?=.*?(G|T|X))0-9]/g, function (str) {
+        $th.val($th.val().replace(/[^(?=.*?(G|T|X|g|t|x)?)0-9]/g, function (str) {
             //alert('You typed " ' + str + ' ".\n\nPlease use only letters and numbers.');
             return '';
-        }));
+        }).toUpperCase());
     });  
 
     $(document).keypress(function (e) {
