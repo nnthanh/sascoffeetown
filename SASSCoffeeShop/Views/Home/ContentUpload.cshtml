@@ -14,52 +14,76 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="content">
-                        <h4>Video upload</h4>
-                        <div class="row">
-                            <div class="col-md-5">
-                                <div class="typo-line">
-                                    <div class="form-group">
-                                        <p class="category">Video Id</p>
-                                        <input class="form-control border-input" id="videoid" type="text" placeholder="Input video id here" required />
+                    <div class="card-content">
+
+                        <!--Table dynamic-->
+                        <div class="x_panel" style="padding:20px">
+                            <h4>Video upload <a id="addVideoBtn" onclick="$('#addVideoForm').show(500); $('#addVideoBtn').hide(500);" class="fa fa-plus" style="cursor:pointer"></a></h4>
+                            <div class="row" hidden id="addVideoForm" style="padding:20px">
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="typo-line">
+                                            <div class="form-group">
+                                                <p class="category">Video Id</p>
+                                                <input class="form-control border-input" id="videoid" type="text" placeholder="Input video id here" required />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="typo-line">
+                                            <div class="form-group">
+                                                <p class="category">Length</p>
+                                                <input class="form-control border-input" id="length" type="text" onkeypress='return (event.charCode >= 48 && event.charCode <= 57 || event.charCode == 58)' maxlength="10" placeholder="Input video's length here" required />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="typo-line">
+                                            <div class="form-group">
+                                                <p class="category">Name</p>
+                                                <input class="form-control border-input" id="name" type="text" placeholder="Input video's name here" required />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="typo-line">
+                                            <div class="form-group">
+                                                <button class="btn btn-default" type="submit" id="submitBtn">Upload</button>
+                                                <a onclick="$('#addVideoForm').hide(500); clearTopicInput(); $('#addVideoBtn').show(500);" class="fa fa-close" style="cursor:pointer;color:red;"></a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-5">
-                                <div class="typo-line">
-                                    <div class="form-group">
-                                        <p class="category">Length</p>
-                                        <input class="form-control border-input" id="length" type="text" onkeypress='return (event.charCode >= 48 && event.charCode <= 57 || event.charCode == 58)' maxlength="10" placeholder="Input video's length here" required />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-5">
-                                <div class="typo-line">
-                                    <div class="form-group">
-                                        <p class="category">Name</p>
-                                        <input class="form-control border-input" id="name" type="text" placeholder="Input video's name here" required />
-                                    </div>
-                                </div>
+
+
+                            @*<hr />*@
+                            <div class="x_content">
+                                <table id="datatableVideo" class="table table-striped table-bordered dataTable no-footer" role="grid" aria-describedby="datatable_info">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Link</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-5">
-                                <div class="typo-line">
-                                    <div class="form-group">
-                                        <button class="btn btn-default" type="submit" id="submitBtn">Upload</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <div class="clearfix"></div>
                     </div>
-                </div>
-            </div>
-        </div>
+                </div><!--  end card  -->
+            </div> <!-- end col-md-12 -->
+        </div> <!-- end row -->
 
         <div class="row">
             <div class="col-md-12">
@@ -187,6 +211,29 @@
         //    //$modal.removeClass('state-appear').addClass('state-leave');
         //});
 
+        $('#datatableVideo').dataTable();
+        $.ajax({
+            type: 'GET',
+            url: 'http://' + PORT + '/sas/sas_server/study/video/getAll',
+            success: function (resp) {
+                if (resp.statuskey == true) {
+                    var oTable = $('#datatableVideo').dataTable();
+                    oTable.fnClearTable();
+
+                    resp.data.forEach(addTableVideoData);
+                } else {
+                    swal(
+                        'Thất bại',
+                        resp.message,
+                        'error'
+                    );
+                    $(':button').prop('disabled', false);
+                }
+            },
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8'
+        });
+
         $('#datatable').dataTable();
         $.ajax({
             type: 'GET',
@@ -284,6 +331,63 @@
         item.name,
         item.nameVi,
         item.id]);
+    };
+
+    function addTableVideoData(item, index) {
+        $('#datatableVideo').dataTable().fnAddData([
+            item.name,
+            "<a href='" + "https://www.youtube.com/watch?v=" + item.videoId + "'>watch video</a>",
+            '<button class="' + 'btn btn-danger" id="deleteVideo" onclick="deleteVideo('+item.id+')"><span class="ti-trash"></span></button>',]);
+    };
+
+    function deleteVideo(id) {
+        swal({
+            title: 'Bạn có chắc chắn không?',
+            text: "Bạn sẽ không thể hoàn tác hành động này!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Đồng ý!',
+            cancelButtonText: 'Hủy!',
+            confirmButtonClass: 'btn btn-success',
+            cancelButtonClass: 'btn btn-danger',
+            buttonsStyling: false
+        }).then(function () {
+            $.ajax({
+            type: 'GET',
+            url: 'http://' + PORT + '/sas/sas_server/admin/deleteVideo/' + id + '/@Session["loggedToken"].ToString()',
+            success: function (resp) {
+                if (resp.statuskey == true) {
+                    swal(
+                        'Thành công',
+                        resp.message,
+                        'success'
+                    );
+                    $(':button').prop('disabled', false);
+                } else {
+                    swal(
+                        'Thất bại',
+                        resp.message,
+                        'error'
+                    );
+                    $(':button').prop('disabled', false);
+                }
+            },
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8'
+        });
+        }, function (dismiss) {
+            // dismiss can be 'cancel', 'overlay',
+            // 'close', and 'timer'
+            if (dismiss === 'cancel') {
+                swal(
+                    'Đã hủy',
+                    'Link của bạn đã được giữ lại :)',
+                    'error'
+                )
+            }
+        })
     };
 
     function addModalTable(item, index) {
