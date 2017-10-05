@@ -121,6 +121,7 @@
                                         <tr>
                                             <th>English</th>
                                             <th>Vietnamese</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -170,6 +171,7 @@
                         <tr>
                             <th>English</th>
                             <th>Vietnamese</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -257,50 +259,27 @@
             contentType: 'application/json; charset=utf-8'
         });
 
-        $('#datatable tbody').on('click', 'tr', function () {
-            var table = $('#datatable').DataTable();
-
-            if (table.row(this).data()[2] != null) {
-                currentTopic = table.row(this).data()[2];
-                $.ajax({
-                    type: 'GET',
-                    url: 'http://'+ PORT +'/sas/sas_server/study/conversation/' + table.row(this).data()[2],
-                    success: function (resp) {
-                        if (resp.statuskey == true) {
-                            var oTable = $('#modaltable').dataTable();
-                            oTable.fnClearTable();
-
-                            resp.sentences.forEach(addModalTable);
-
-                            $.notify({
-                                icon: 'ti-bookmark',
-                                message: "Press x or Escape button to close modal."
-
-                            }, {
-                                type: 'danger',
-                                timer: 4000,
-                                placement: {
-                                    from: 'top',
-                                    align: 'left'
-                                }
-                            });
-                        } else {
-                            swal(
-                                'Thất bại',
-                                resp.message,
-                                'error'
-                            );
-                            $(':button').prop('disabled', false);
-                        }
-                    },
-                    dataType: 'json',
-                    contentType: 'application/json; charset=utf-8'
-                });
-
-                $overlay.addClass('state-show');
-                $modal.removeClass('state-leave').addClass('state-appear');
+        $(document).keyup(function (e) {
+            if (e.keyCode == 27) { // escape key maps to keycode `27`
+                $overlay.removeClass('state-show');
+                $modal.removeClass('state-appear').addClass('state-leave');
             }
         });
+
+        //$('#datatable tbody').on('click', 'tr', function () {
+        //    if ($overlay.hasClass('state-show')) {
+        //        $overlay.removeClass('state-show');
+        //        $modal.removeClass('state-appear').addClass('state-leave');
+        //    }
+        //});
+
+        //$overlay.click(function (e) {
+        //    e.preventDefault();
+        //    $('#overlay, #alertModalOuter').fadeOut(400, function () {
+        //        $overlay.removeClass('state-show');
+        //        $modal.removeClass('state-appear').addClass('state-leave');
+        //    });
+        //});
 
         $(document).keyup(function (e) {
             if (e.keyCode == 27) { // escape key maps to keycode `27`
@@ -330,14 +309,56 @@
         $('#datatable').dataTable().fnAddData([
         item.name,
         item.nameVi,
-        item.id]);
+        '<button class="' + 'btn btn-success" onclick="showModal(' + item.id + ')"><span class="ti-gallery"></span></button>' + " " +
+        '<button class="' + 'btn btn-danger" id="deleteVideo" onclick="deleteTopic(' + item.id + ')"><span class="ti-trash"></span></button>']);
     };
 
     function addTableVideoData(item, index) {
         $('#datatableVideo').dataTable().fnAddData([
             item.name,
             "<a href='" + "https://www.youtube.com/watch?v=" + item.videoId + "'>watch video</a>",
-            '<button class="' + 'btn btn-danger" id="deleteVideo" onclick="deleteVideo('+item.id+')"><span class="ti-trash"></span></button>',]);
+            '<button class="' + 'btn btn-danger" id="deleteVideo" onclick="deleteVideo('+item.id+')"><span class="ti-trash"></span></button>']);
+    };
+
+    function showModal(id) {
+        currentTopic = id;
+        $.ajax({
+            type: 'GET',
+            url: 'http://' + PORT + '/sas/sas_server/study/conversation/' + id,/*table.row(this).data()[2],*/
+            success: function (resp) {
+                if (resp.statuskey == true) {
+                    var oTable = $('#modaltable').dataTable();
+                    oTable.fnClearTable();
+
+                    resp.sentences.forEach(addModalTable);
+
+                    $.notify({
+                        icon: 'ti-bookmark',
+                        message: "Press x or Escape button to close modal."
+
+                    }, {
+                            type: 'danger',
+                            timer: 4000,
+                            placement: {
+                                from: 'top',
+                                align: 'left'
+                            }
+                        });
+                } else {
+                    swal(
+                        'Thất bại',
+                        resp.message,
+                        'error'
+                    );
+                    $(':button').prop('disabled', false);
+                }
+            },
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8'
+        });
+
+        $overlay.addClass('state-show');
+        $modal.removeClass('state-leave').addClass('state-appear');
     };
 
     function deleteVideo(id) {
@@ -383,7 +404,58 @@
             // 'close', and 'timer'
             if (dismiss === 'cancel') {
                 swal(
-                    'Đã hủy',
+                    'Cancelled',
+                    'Topic của bạn đã được giữ lại :)',
+                    'error'
+                )
+            }
+        })
+    };
+
+    function deleteTopic(id) {
+        swal({
+            title: 'Bạn có chắc chắn không?',
+            text: "Bạn sẽ không thể hoàn tác hành động này!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Đồng ý!',
+            cancelButtonText: 'Hủy!',
+            confirmButtonClass: 'btn btn-success',
+            cancelButtonClass: 'btn btn-danger',
+            buttonsStyling: false
+        }).then(function () {
+            $.ajax({
+            type: 'GET',
+            url: 'http://' + PORT + '/sas/sas_server/admin/deleteTopic/' + id + '/@Session["loggedToken"].ToString()',
+            success: function (resp) {
+                if (resp.statuskey == true) {
+                    swal(
+                        'Thành công',
+                        resp.message,
+                        'success'
+                    ).then(function () {
+                        location.reload();
+                        })
+                } else {
+                    swal(
+                        'Thất bại',
+                        resp.message,
+                        'error'
+                    );
+                    $(':button').prop('disabled', false);
+                }
+            },
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8'
+        });
+        }, function (dismiss) {
+            // dismiss can be 'cancel', 'overlay',
+            // 'close', and 'timer'
+            if (dismiss === 'cancel') {
+                swal(
+                    'Cancelled',
                     'Link của bạn đã được giữ lại :)',
                     'error'
                 )
@@ -394,7 +466,59 @@
     function addModalTable(item, index) {
         $('#modaltable').dataTable().fnAddData([
         item.sentenceEn,
-        item.sentenceVi]);
+        item.sentenceVi,
+        '<button class="' + 'btn btn-danger" onclick="deleteSentence(' + item.id + ')"><span class="ti-trash"></span></button>']);
+    };
+
+        function deleteSentence(id) {
+        swal({
+            title: 'Bạn có chắc chắn không?',
+            text: "Bạn sẽ không thể hoàn tác hành động này!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Đồng ý!',
+            cancelButtonText: 'Hủy!',
+            confirmButtonClass: 'btn btn-success',
+            cancelButtonClass: 'btn btn-danger',
+            buttonsStyling: false
+        }).then(function () {
+            $.ajax({
+            type: 'GET',
+            url: 'http://' + PORT + '/sas/sas_server/admin/deleteSentence/' + id + '/@Session["loggedToken"].ToString()',
+            success: function (resp) {
+                if (resp.statuskey == true) {
+                    swal(
+                        'Thành công',
+                        resp.message,
+                        'success'
+                    ).then(function () {
+                        location.reload();
+                        })
+                } else {
+                    swal(
+                        'Thất bại',
+                        resp.message,
+                        'error'
+                    );
+                    $(':button').prop('disabled', false);
+                }
+            },
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8'
+        });
+        }, function (dismiss) {
+            // dismiss can be 'cancel', 'overlay',
+            // 'close', and 'timer'
+            if (dismiss === 'cancel') {
+                swal(
+                    'Cancelled',
+                    'Link của bạn đã được giữ lại :)',
+                    'error'
+                )
+            }
+        })
     };
 
     //Add Video
@@ -478,7 +602,7 @@
                             clearTopicInput();
                             location.reload(2000);
                         })
-                        
+
                     } else {
                         swal(
                             'Thất bại',
