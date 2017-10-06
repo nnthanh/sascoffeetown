@@ -8,6 +8,16 @@ namespace SASSCoffeeShop.Controllers
 {
     public class HomeController : Controller
     {
+        public ActionResult ManageUser()
+        {
+            //Check session
+            if (Session["loggedUser"] == null || Session["loggedToken"] == null || Int32.Parse(Session["loggedRole"].ToString()) != 1)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            return View();
+        }
+
         public ActionResult UpgradeMembership()
         {
             //Check session
@@ -32,7 +42,7 @@ namespace SASSCoffeeShop.Controllers
         public ActionResult SplashNews()
         {
             //Check session
-            if (Session["loggedUser"] == null || Session["loggedToken"] == null)
+            if (Session["loggedUser"] == null || Session["loggedToken"] == null || Int32.Parse(Session["loggedRole"].ToString()) != 1)
             {
                 return RedirectToAction("Login", "Account");
             }
@@ -54,7 +64,7 @@ namespace SASSCoffeeShop.Controllers
         public ActionResult Branch()
         {
             //Check session
-            if (Session["loggedUser"] == null || Session["loggedToken"] == null)
+            if (Session["loggedUser"] == null || Session["loggedToken"] == null || Int32.Parse(Session["loggedRole"].ToString()) != 1)
             {
                 return RedirectToAction("Login", "Account");
             }
@@ -65,7 +75,7 @@ namespace SASSCoffeeShop.Controllers
         public ActionResult EventList()
         {
             //Check session
-            if (Session["loggedUser"] == null || Session["loggedToken"] == null)
+            if (Session["loggedUser"] == null || Session["loggedToken"] == null || Int32.Parse(Session["loggedRole"].ToString()) != 1)
             {
                 return RedirectToAction("Login", "Account");
             }
@@ -76,7 +86,7 @@ namespace SASSCoffeeShop.Controllers
         public ActionResult ContentUpload()
         {
             //Check session
-            if (Session["loggedUser"] == null || Session["loggedToken"] == null)
+            if (Session["loggedUser"] == null || Session["loggedToken"] == null || Int32.Parse(Session["loggedRole"].ToString()) != 1)
             {
                 return RedirectToAction("Login", "Account");
             }

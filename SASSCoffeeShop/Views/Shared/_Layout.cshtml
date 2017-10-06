@@ -99,36 +99,39 @@
                                 <p>Check-in</p>
                             </a>
                         </li>
-                        <li id="tabpanel-3">
-                            <a href='@Url.Action("SplashNews","Home")'>
-                                <i class="ti-bell"></i>
-                                <p>Splash news</p>
-                            </a>
-                        </li>
                         <li id="tabpanel-4">
                             <a href='@Url.Action("Event","Home")'>
                                 <i class="ti-gift"></i>
                                 <p>Event</p>
                             </a>
                         </li>
-                        <li id="tabpanel-5">
-                            <a href='@Url.Action("Branch","Home")'>
-                                <i class="ti-home"></i>
-                                <p>Cửa hàng</p>
-                            </a>
-                        </li>
-                        <li id="tabpanel-6">
-                            <a href='@Url.Action("EventList","Home")'>
-                                <i class="ti-view-list-alt"></i>
-                                <p>Event list</p>
-                            </a>
-                        </li>
-                        <li id="tabpanel-7">
-                            <a href='@Url.Action("ContentUpload","Home")'>
-                                <i class="ti-export"></i>
-                                <p>Content upload</p>
-                            </a>
-                        </li>
+                        @if (Int32.Parse(Session["loggedRole"].ToString()) == 1)
+                        {
+                            <li id="tabpanel-3">
+                                <a href='@Url.Action("SplashNews","Home")'>
+                                    <i class="ti-bell"></i>
+                                    <p>Splash news</p>
+                                </a>
+                            </li>
+                            <li id="tabpanel-5">
+                                <a href='@Url.Action("Branch","Home")'>
+                                    <i class="ti-home"></i>
+                                    <p>Cửa hàng</p>
+                                </a>
+                            </li>
+                            <li id="tabpanel-6">
+                                <a href='@Url.Action("EventList","Home")'>
+                                    <i class="ti-view-list-alt"></i>
+                                    <p>Event list</p>
+                                </a>
+                            </li>
+                            <li id="tabpanel-7">
+                                <a href='@Url.Action("ContentUpload","Home")'>
+                                    <i class="ti-export"></i>
+                                    <p>Content upload</p>
+                                </a>
+                            </li>
+                        }                  
                     </ul>
                 </div>
             </div>

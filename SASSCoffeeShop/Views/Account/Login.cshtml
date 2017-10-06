@@ -70,7 +70,8 @@
 		            if (resp.statuskey == true) {
 		                my_data = {
 		                    Name: resp.name,
-		                    Token: resp.token
+                            Token: resp.token,
+                            Role: resp.role
 		                };
 
 		                $.ajax({

@@ -271,6 +271,7 @@
     <Content Include="Views\Home\Branch.cshtml" />
     <Content Include="Views\Home\EventList.cshtml" />
     <Content Include="Views\Home\ContentUpload.cshtml" />
+    <Content Include="Views\Home\ManageUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
