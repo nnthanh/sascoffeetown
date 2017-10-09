@@ -131,6 +131,12 @@
                                     <p>Content upload</p>
                                 </a>
                             </li>
+                            <li id="tabpanel-8">
+                                <a href='@Url.Action("ManageUser","Home")'>
+                                    <i class="ti-user"></i>
+                                    <p>Manage User</p>
+                                </a>
+                            </li>
                         }                  
                     </ul>
                 </div>
@@ -218,6 +224,7 @@
                 $('#tabpanel-5').removeClass('active');
                 $('#tabpanel-6').removeClass('active');
                 $('#tabpanel-7').removeClass('active');
+                $('#tabpanel-8').removeClass('active');
 
                 if ($('#brand').text().trim() == 'Nâng cấp thành viên') {
                     $('#tabpanel-1').addClass('active');
@@ -240,7 +247,10 @@
                 if ($('#brand').text().trim() == 'Content upload') {
                     $('#tabpanel-7').addClass('active');
                 }
-             
+                if ($('#brand').text().trim() == 'Manage user') {
+                    $('#tabpanel-8').addClass('active');
+                }
+
             });
         </script>
 

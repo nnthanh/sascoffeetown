@@ -4,5 +4,64 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>ManageUser</h2>
 
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-content">
+
+                        <!--Table dynamic-->
+                        <div class="x_panel" style="padding:20px">
+                            <h4>List of users</h4>
+                            <div class="x_content">
+                                <table id="datatable" class="table table-striped table-bordered dataTable no-footer" role="grid" aria-describedby="datatable_info">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Role</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="clearfix"></div>
+                    </div>
+                </div><!--  end card  -->
+            </div> <!-- end col-md-12 -->
+        </div> <!-- end row -->
+    </div>
+</div>
+
+<script>
+    $('#brand').text('Manage user');
+    $(document).ready(function () {
+
+        $('#datatable').dataTable();
+        $.ajax({
+            type: 'GET',
+            url: 'http://' + PORT + '/sas/sas_server/study/video/getAll',
+            success: function (resp) {
+                if (resp.statuskey == true) {
+                    var oTable = $('#datatableVideo').dataTable();
+                    oTable.fnClearTable();
+
+                    resp.data.forEach(addTableVideoData);
+                } else {
+                    swal(
+                        'Thất bại',
+                        resp.message,
+                        'error'
+                    );
+                    $(':button').prop('disabled', false);
+                }
+            },
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8'
+        });
+    });
+</script>
