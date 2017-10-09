@@ -246,7 +246,15 @@
     }
 
     function excelExport(data) {
-        const xls = new xlsExport(data, "Attendants");
-        xls.exportToXLS('export.xls')
+        if (data.length > 0) {
+            const xls = new xlsExport(data, "Attendants");
+            xls.exportToXLS('export.xls');
+        } else {
+            swal(
+                'Thất bại',
+                'Data is empty',
+                'error'
+            );
+        };
     }
 </script>
