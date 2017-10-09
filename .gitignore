@@ -1,7 +1,5 @@
 
 *.pdb
-*.pdb
 *.cache
 *.dll
-*.pdb
-*.dll
+*.config

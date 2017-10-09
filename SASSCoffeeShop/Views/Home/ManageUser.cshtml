@@ -4,6 +4,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<!--Modal-->
+<link rel="stylesheet" href="~/Content/css/modal.css">
+<!-- Modal -->
+<script src="~/Content/js/modal.js"></script>
 
 <div class="content">
     <div class="container-fluid">
@@ -14,7 +18,38 @@
 
                         <!--Table dynamic-->
                         <div class="x_panel" style="padding:20px">
-                            <h4>List of users</h4>
+                            <h4>List of users <a id="addUserBtn" onclick="$('#addUserForm').show(500); $('#addUserBtn').hide(500);" class="fa fa-plus" style="cursor:pointer"></a></h4>
+
+                            <div class="row" hidden id="addUserForm">
+                                <div class="col-md-8">
+                                    <div class="typo-line">
+                                        <div class="form-group">
+                                            <p class="category">Username :</p>
+                                            <input class="form-control border-input" id="addUsername" type="text" placeholder="Username" required />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="typo-line">
+                                        <div class="form-group">
+                                            <p class="category">Password :</p>
+                                            <input class="form-control border-input" id="addPassword" type="password" placeholder="Password" required />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="typo-line">
+                                        <div class="form-group">
+                                            <p class="category">Confirm Password :</p>
+                                            <input class="form-control border-input" id="confirmAddPwd" type="password" placeholder="Re-enter your password" required />
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-success" style="display:inline-block" id="addUserBtn" onclick="validate('addPassword','confirmAddPwd')">Add user</button>
+                                <a onclick="$('#addUserForm').hide(500); $('#addUserBtn').show(500);" class="fa fa-close" style="cursor:pointer;color:red;"></a>
+                            </div>
+                            <br />
+
                             <div class="x_content">
                                 <table id="datatable" class="table table-striped table-bordered dataTable no-footer" role="grid" aria-describedby="datatable_info">
                                     <thead>
@@ -37,20 +72,64 @@
     </div>
 </div>
 
-<script>
-    $('#brand').text('Manage user');
-    $(document).ready(function () {
+<div class="modal-frame">
+    <div class="modal" style="left: 30%;right:20%;">
+        <div class="modal-inset" id="detailModal">
+            <div class="button close"><i class="fa fa-close"></i></div>
 
+            <div class="modal-body" style="max-height:calc(100vh - 210px);overflow-y:auto;">
+                <h3>Edit user</h3>
+                <div class="row" id="editUserForm">
+                    <div class="col-md-12">
+                        <div class="typo-line">
+                            <div class="form-group">
+                                <p class="category">Username:</p>
+                                <input class="form-control border-input" id="username" type="text" placeholder="Username" required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="typo-line">
+                            <div class="form-group">
+                                <p class="category">Password:</p>
+                                <input class="form-control border-input" id="password" type="password" placeholder="Password" required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="typo-line">
+                            <div class="form-group">
+                                <p class="category">Confirm Pwd:</p>
+                                <input class="form-control border-input" id="confirmEditPwd" type="password" placeholder="Re-enter your password" required />
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <button class="btn btn-success" style="display:inline-block" id="editUserBtn" onclick="validate('password','confirmEditPwd');">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-overlay"></div>
+
+<script>
+    var currentUser;
+    var isAddMatch = false;
+    var isEditMatch = false;
+    $('#brand').text('Manage user');
+
+    $(document).ready(function () {
         $('#datatable').dataTable();
         $.ajax({
             type: 'GET',
-            url: 'http://' + PORT + '/sas/sas_server/study/video/getAll',
+            url: 'http://' + PORT + '/sas/sas_server/admin/getAll/' + '@Session["loggedToken"].ToString()',
             success: function (resp) {
                 if (resp.statuskey == true) {
-                    var oTable = $('#datatableVideo').dataTable();
+                    var oTable = $('#datatable').dataTable();
                     oTable.fnClearTable();
 
-                    resp.data.forEach(addTableVideoData);
+                    resp.admins.forEach(addTableData);
                 } else {
                     swal(
                         'Thất bại',
@@ -64,4 +143,223 @@
             contentType: 'application/json; charset=utf-8'
         });
     });
+
+    function addTableData(item, index) {
+        if (item.role == 1) {
+            $('#datatable').dataTable().fnAddData([
+                item.name,
+                "Main Admin",
+                '<button class="' + 'btn btn-success" onclick="showModal(' + item.id + ",'" + item.name + "'" + ')"><span class="ti-pencil"></span></button>' + " " +
+                '<button class="' + 'btn btn-danger" onclick="deleteUser(' + item.id + ')"><span class="ti-trash"></span></button>']);
+        } else {
+            $('#datatable').dataTable().fnAddData([
+                item.name,
+                "Branch Admin",
+                '<button class="' + 'btn btn-success" onclick="showModal(' + item.id + ",'" + item.name + "'" +')"><span class="ti-pencil"></span></button>' + " " +
+                '<button class="' + 'btn btn-danger" onclick="deleteUser(' + item.id + ')"><span class="ti-trash"></span></button>']);
+        }
+
+    };
+
+    function showModal(id, name) {
+        currentUser = id;
+
+        $('#username').val(name);
+        $('#username').text(name);
+
+        $overlay.addClass('state-show');
+        $modal.removeClass('state-leave').addClass('state-appear');
+    };
+
+    function validate(id, conid) {
+        var length = false;
+        var isUsernameValid = false;
+        var pwd = document.getElementById(id);
+        if (pwd.value.length >= 6) {
+            length = true;
+        }
+        else {
+            swal(
+                'Thất bại',
+                'Password must be >= 6 characters',
+                'error'
+            );
+        };
+
+        if (id == "password" && length == true) {
+            if ($('#username').val() != "") isUsernameValid = true;
+            if (isEditMatch) {
+                if (isUsernameValid) editUser();
+                else {
+                    swal(
+                        'Thất bại',
+                        'Username cannot be empty',
+                        'error'
+                    );
+                };         
+            } else {
+                swal(
+                    'Thất bại',
+                    'Password do not match',
+                    'error'
+                );
+            }
+            
+        } else if (id == "addPassword" && length == true) {
+            if ($('#addUsername').val() != "") isUsernameValid = true;
+            if (isAddMatch) {
+                if (isUsernameValid) createUser();
+                else {
+                    swal(
+                        'Thất bại',
+                        'Username cannot be empty',
+                        'error'
+                    );
+                }
+            } else {
+                swal(
+                    'Thất bại',
+                    'Password do not match',
+                    'error'
+                );
+            }
+        }
+    };
+
+    $('#confirmAddPwd').focusout(function () {
+        var pass = $('#addPassword').val();
+        var pass2 = $('#confirmAddPwd').val();
+        if (pass == pass2) {
+            isAddMatch = true;
+        }
+
+    });
+
+    $('#confirmEditPwd').focusout(function () {
+        var pass = $('#password').val();
+        var pass2 = $('#confirmEditPwd').val();
+        if (pass == pass2) {
+            isEditMatch = true;
+        }
+    });
+
+    function createUser() {
+        var credential = {
+            username: $('#addUsername').val(),
+            password: $('#addPassword').val()
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: 'http://' + PORT + '/sas/sas_server/admin/createAdmin/' + '@Session["loggedToken"].ToString()',
+            data: JSON.stringify(credential),
+            success: function (resp) {
+                if (resp.statuskey == true) {
+                    swal(
+                        'Thành công',
+                        'Create user successfully',
+                        'success'
+                    ).then(function () {
+                        location.reload();
+                    })
+                } else {
+                    swal(
+                        'Thất bại',
+                        resp.message,
+                        'error'
+                    );
+                    $(':button').prop('disabled', false);
+                }
+            },
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8'
+        });
+    };
+
+    function editUser() {
+        var credential = {
+            username: $('#username').val(),
+            password: $('#password').val(),
+            id: currentUser
+         };
+
+        $.ajax({
+            type: 'POST',
+            url: 'http://' + PORT + '/sas/sas_server/admin/editAdmin/' + '@Session["loggedToken"].ToString()',
+            data: JSON.stringify(credential),
+            success: function (resp) {
+                if (resp.statuskey == true) {
+                    swal(
+                        'Thành công',
+                        'Edit user successfully',
+                        'success'
+                    ).then(function () {
+                        location.reload();
+                    })
+                } else {
+                    swal(
+                        'Thất bại',
+                        resp.message,
+                        'error'
+                    );
+                    $(':button').prop('disabled', false);
+                }
+            },
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8'
+        });
+    };
+
+    function deleteUser(id) {
+         swal({
+            title: 'Bạn có chắc chắn không?',
+            text: "Bạn sẽ không thể hoàn tác hành động này!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Đồng ý!',
+            cancelButtonText: 'Hủy!',
+            confirmButtonClass: 'btn btn-success',
+            cancelButtonClass: 'btn btn-danger',
+            buttonsStyling: false
+        }).then(function () {
+            $.ajax({
+                type: 'GET',
+                url: 'http://' + PORT + '/sas/sas_server/admin/deleteAdmin/' + id + '/@Session["loggedToken"].ToString()',
+                success: function (resp) {
+                    if (resp.statuskey == true) {
+                        swal(
+                            'Thành công',
+                            resp.message,
+                            'success'
+                        ).then(function () {
+                            location.reload();
+                        })
+                    } else {
+                        swal(
+                            'Thất bại',
+                            resp.message,
+                            'error'
+                        );
+                        $(':button').prop('disabled', false);
+                    }
+                },
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8'
+        });
+        }, function (dismiss) {
+            // dismiss can be 'cancel', 'overlay',
+            // 'close', and 'timer'
+            if (dismiss === 'cancel') {
+                swal(
+                    'Cancelled',
+                    'Đã hủy thành công',
+                    'error'
+                );
+            }
+        })
+
+    };
+
 </script>
