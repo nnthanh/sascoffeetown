@@ -50,6 +50,7 @@
                                             <th>Name</th>
                                             <th>End date</th>
                                             <th>Description</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -67,7 +68,7 @@
 </div>
 
 <div class="modal-frame">
-    <div class="modal" style="left: 45%;right:5%;">
+    <div class="modal" style="left: 30%;right:20%;">
         <div class="modal-inset" id="detailModal">
             <div class="button close"><i class="fa fa-close"></i></div>
 
@@ -78,6 +79,7 @@
                         <tr>
                             <th>Name</th>
                             <th>Phone</th>
+                            <th>Registered date</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -118,47 +120,7 @@
         });
 
         $('#datatable tbody').on('click', 'tr', function () {
-            var table = $('#datatable').DataTable();
-
-            if (table.row(this).data()[3] != null) {
-                $.ajax({
-                    type: 'GET',
-                    url: 'http://'+ PORT +'/sas/sas_server/promo/event/' + table.row(this).data()[3] + '/members',
-                    success: function (resp) {
-                        if (resp.statuskey == true) {
-                            var oTable = $('#modaltable').dataTable();
-                            oTable.fnClearTable();
-
-                            resp.members.forEach(addModalTable);
-
-                            $.notify({
-                                icon: 'ti-bookmark',
-                                message: "Press x or Escape button to close modal."
-
-                            }, {
-                                type: 'danger',
-                                timer: 4000,
-                                placement: {
-                                    from: 'top',
-                                    align: 'left'
-                                }
-                            });
-                        } else {
-                            swal(
-                                'Thất bại',
-                                resp.message,
-                                'error'
-                            );
-                            $(':button').prop('disabled', false);
-                        }
-                    },
-                    dataType: 'json',
-                    contentType: 'application/json; charset=utf-8'
-                });
-
-                $overlay.addClass('state-show');
-                $modal.removeClass('state-leave').addClass('state-appear');
-            }         
+            
         });
 
         $(document).keyup(function (e) {
@@ -201,7 +163,8 @@
     function addModalTable(item, index) {
         $('#modaltable').dataTable().fnAddData([
         item.name,
-        item.phone]);
+        item.phone,
+        item.joinDate]);
     };
 
     function addTableData(item, index) {
@@ -209,6 +172,81 @@
         item.name,
         item.dateExpired,
         item.description,
-        item.id]);
+        '<button class="' + 'btn btn-success" onclick="showModal(' + item.id + ')"><span class="ti-gallery"></span></button>' + " " +
+        '<button class="' + 'btn btn-danger" id="deleteVideo" onclick="downloadAttendants(' + item.id + ')"><span class="ti-import"></span></button>']);
     };
+
+    function downloadAttendants(id) {
+        $.ajax({
+            type: 'GET',
+            url: 'http://' + PORT + '/sas/sas_server/promo/event/' + id + '/members',
+            success: function (resp) {
+                if (resp.statuskey == true) {
+                    var attendants = [];
+                    for (i = 0; i < resp.members.length; ++i) {
+                        attendants.push({
+                            "#": i+1,
+                            "Name": resp.members[i].name
+                        });
+                    };
+                    excelExport(attendants);
+                } else {
+                    swal(
+                        'Thất bại',
+                        resp.message,
+                        'error'
+                    );
+                    $(':button').prop('disabled', false);
+                }
+            },
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8'
+        });
+    }
+
+    function showModal(id) {
+        var table = $('#datatable').DataTable();
+        $.ajax({
+            type: 'GET',
+            url: 'http://' + PORT + '/sas/sas_server/promo/event/' +id + '/members',
+            success: function (resp) {
+                if (resp.statuskey == true) {
+                    var oTable = $('#modaltable').dataTable();
+                    oTable.fnClearTable();
+
+                    resp.members.forEach(addModalTable);
+
+                    $.notify({
+                        icon: 'ti-bookmark',
+                        message: "Press x or Escape button to close modal."
+
+                    }, {
+                            type: 'danger',
+                            timer: 4000,
+                            placement: {
+                                from: 'top',
+                                align: 'left'
+                            }
+                        });
+                } else {
+                    swal(
+                        'Thất bại',
+                        resp.message,
+                        'error'
+                    );
+                    $(':button').prop('disabled', false);
+                }
+            },
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8'
+        });
+
+        $overlay.addClass('state-show');
+        $modal.removeClass('state-leave').addClass('state-appear');     
+    }
+
+    function excelExport(data) {
+        const xls = new xlsExport(data, "Attendants");
+        xls.exportToXLS('export.xls')
+    }
 </script>
