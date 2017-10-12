@@ -68,6 +68,7 @@ namespace SASSCoffeeShop.Controllers
             Session["loggedUser"] = user.Name;
             Session["loggedToken"] = user.Token;
             Session["loggedRole"] = user.Role;
+            Session["loggedBranchId"] = user.BranchId;
             Session["sessionid"] = System.Web.HttpContext.Current.Session.SessionID;
 
             //return RedirectToAction("UpgradeMembership", "Home");

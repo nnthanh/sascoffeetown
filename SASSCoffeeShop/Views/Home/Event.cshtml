@@ -3,7 +3,7 @@
     ViewBag.Title = "Event";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+@*<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap/3/css/bootstrap.css" />*@
 <div class="content">
     <div class="container-fluid">
         <div class="row">
@@ -334,6 +334,13 @@
     });
 
     $(document).ready(function () {
+        //$('#eventdate').daterangepicker({
+        //    singleDatePicker: true,
+        //    calender_style: "picker_2"
+        //}, function (start, end, label) {
+        //    console.log(start.toISOString(), end.toISOString(), label);
+        //    });
+
         $.ajax({
             type: 'GET',
             url: 'http://'+ PORT +'/sas/sas_server/branch/getAll',
@@ -392,10 +399,7 @@
         var vurl = 'http://'+ PORT +'/sas/sas_server/admin/event/create/' + '@Session["loggedToken"].ToString()';
 
         var temp = new Date($('#eventdate').val()).toDateString();
-        //temp = 
-
         var date = temp.substr(4, temp.length);
-
         date = date.splice(6, 0, ',');
 
         var branch = {

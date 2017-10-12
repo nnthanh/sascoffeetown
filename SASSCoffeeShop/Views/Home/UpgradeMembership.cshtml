@@ -28,7 +28,7 @@
                                     <div class="form-group">
                                         <p class="category">Branch</p>
                                         <div class="dropdown">
-                                            <input class="dropdown-toggle form-control border-input" id="branch" readonly data-toggle="dropdown" type="text" required />
+                                            <input class="dropdown-toggle form-control border-input" id="branch" readonly data-toggle="dropdown" type="text" required/>
                                             <ul class="dropdown-menu" id="branch_ul"></ul>
                                         </div>
                                     </div>
@@ -67,6 +67,8 @@
 
 <script>
     var branchid = 0;
+    var userRole = @Session["loggedRole"];
+    var userBranchId = @Session["loggedBranchId"];
 
     $(document).ready(function () {
         $.notify({
@@ -84,9 +86,19 @@
             success: function (resp) {
                 if (resp.statuskey == true) {
 
-                    resp.branchList.forEach(function (entry) {
-                        $('#branch_ul').append('<li><a onclick="branchOnChange(' + "'" + entry.name + "','" + entry.id + "'" +')">' + entry.name + '</a></li>');
-                    });
+                    if (userRole != 1) {
+                        resp.branchList.forEach(function (entry) {
+                            if (entry.id == userBranchId) {
+                                branchChange(entry.name, entry.id)
+                                //$('#branch_ul').append('<li><a onclick="branchChange(' + "'" + entry.name + "','" + entry.id + "'" + ')">' + entry.name + '</a></li>');
+                            }                   
+                        });
+                    } else {
+                        resp.branchList.forEach(function (entry) {
+                            $('#branch_ul').append('<li><a onclick="branchChange(' + "'" + entry.name + "','" + entry.id + "'" + ')">' + entry.name + '</a></li>');
+                        });
+                    }
+                    
                 } else {
                     swal(
                         'Thất bại',
@@ -101,7 +113,7 @@
         });
     });
 
-    function branchOnChange(value, id) {
+    function branchChange(value, id) {
         //alert(id);
         branchid = id;
         $('#branch').text('' + value);

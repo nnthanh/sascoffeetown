@@ -67,7 +67,8 @@
     </div>
 </div>
 
-<div class="modal-frame">
+
+<div class="modal-frame" id="attendant">
     <div class="modal" style="left: 30%;right:20%;">
         <div class="modal-inset" id="detailModal">
             <div class="button close"><i class="fa fa-close"></i></div>
@@ -89,12 +90,51 @@
         </div>
     </div>
 </div>
-<div class="modal-overlay"></div>
+
+<div class="modal-overlay" id="attendant"></div>
+
+
+
+<div class="modal-frame" id="datepick">
+    <div class="modal" id="hello" style="left: 30%;right:20%; top:20%">
+        <div class="modal-inset" id="detailModal">
+            <div class="button close"><i class="fa fa-close"></i></div>
+
+            <div class="modal-body" style="max-height:calc(100vh - 210px);overflow-y:auto;">
+                <h3>Download Option</h3>
+                <h6 style="float:right"><span class="alert-warning">*From date should smaller than To date</span></h6>
+                @*<input class="form-control border-input" type="text" id="eventdate" required />*@             
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="typo-line">
+                            <div class="form-group">
+                                <p class="category">Từ ngày :</p>
+                                <input class="form-control border-input" type="date" id="fromdate">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="typo-line">
+                            <div class="form-group">
+                                <p class="category">Đến ngày :</p>
+                                <input class="form-control border-input" type="date" id="todate">
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-success" style="display:inline-block" id="confirmDate" onclick="validateDateInput()">OK!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-overlay" id="datepick"></div>
 
 <script>
+
     $('#brand').text('Event list');
     var branchid;
     var tableData;
+    var currenteventid = null;
     $(document).ready(function () {
         $('#datatable').dataTable();
         $.ajax({
@@ -127,9 +167,27 @@
             if (e.keyCode == 27) { // escape key maps to keycode `27`
                 $overlay.removeClass('state-show');
                 $modal.removeClass('state-appear').addClass('state-leave');
+
+                $dateoverlay.removeClass('state-show');
+                $datemodal.removeClass('state-appear').addClass('state-leave');
             }
         });
     });
+
+    function validateDateInput() {
+        var from = $('#fromdate').val();
+        var to = $('#todate').val();
+
+        if ((new Date(from).getTime() > new Date(to).getTime()) || from == null || to == null || isNaN(Date.parse(from)) || isNaN(Date.parse(to))) {
+            swal(
+                'Thất bại',
+                'Invalid date',
+                'error'
+            );
+        } else {
+            downloadAttendants(currenteventid,from,to);
+        };
+    };
 
     function branchOnChange(value, id) {
         branchid = id;
@@ -172,11 +230,22 @@
         item.name,
         item.dateExpired,
         item.description,
-        '<button class="' + 'btn btn-success" onclick="showModal(' + item.id + ')"><span class="ti-gallery"></span></button>' + " " +
-        '<button class="' + 'btn btn-danger" id="deleteVideo" onclick="downloadAttendants(' + item.id + ')"><span class="ti-import"></span></button>']);
+        '<button class="btn btn-success" onclick="showModal(' + item.id + ')"><span class="ti-gallery"></span></button>' + " " +
+        '<button class="btn btn-danger" id="deleteEvent" onclick="showDateModal(' + item.id + ')"><span class="ti-import"></span></button>']);
     };
 
-    function downloadAttendants(id) {
+    function showDateModal(id) {
+        currenteventid = id;
+        $dateoverlay.addClass('state-show');
+        $datemodal.removeClass('state-leave').addClass('state-appear');
+    };
+
+    function downloadAttendants(id,from,to) {       
+
+        var temp_fromdate = new Date(from).toDateString();
+        var fromdate = temp_fromdate.substr(4, temp_fromdate.length);
+        fromdate = fromdate.slice(6, 0, ',');
+
         $.ajax({
             type: 'GET',
             url: 'http://' + PORT + '/sas/sas_server/promo/event/' + id + '/members',
@@ -186,7 +255,9 @@
                     for (i = 0; i < resp.members.length; ++i) {
                         attendants.push({
                             "#": i+1,
-                            "Name": resp.members[i].name
+                            "Name": resp.members[i].name,
+                            "Phone": resp.members[i].phone,
+                            "Join Date": resp.members[i].joinDate
                         });
                     };
                     excelExport(attendants);
@@ -202,6 +273,7 @@
             dataType: 'json',
             contentType: 'application/json; charset=utf-8'
         });
+        currenteventid = null;
     }
 
     function showModal(id) {
@@ -240,7 +312,7 @@
             dataType: 'json',
             contentType: 'application/json; charset=utf-8'
         });
-
+       
         $overlay.addClass('state-show');
         $modal.removeClass('state-leave').addClass('state-appear');     
     }
