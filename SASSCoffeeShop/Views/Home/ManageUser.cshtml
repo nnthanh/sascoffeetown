@@ -45,6 +45,19 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="col-md-8">
+                                    <div class="typo-line">
+                                        <div class="form-group">
+                                            <p class="category">Branch</p>
+                                            <div class="dropdown">
+                                                <input class="dropdown-toggle form-control border-input" id="branch" readonly data-toggle="dropdown" type="text" required />
+                                                <ul class="dropdown-menu" id="branch_ul"></ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <button class="btn btn-success" style="display:inline-block" id="addUserBtn" onclick="validate('addPassword','confirmAddPwd')">Add user</button>
                                 <a onclick="$('#addUserForm').hide(500); $('#addUserBtn').show(500);" class="fa fa-close" style="cursor:pointer;color:red;"></a>
                             </div>
@@ -114,12 +127,15 @@
 <div class="modal-overlay"></div>
 
 <script>
+    var branchid = null;
     var currentUser;
     var isAddMatch = false;
     var isEditMatch = false;
     $('#brand').text('Manage user');
 
     $(document).ready(function () {
+
+        //CALL USERS TABLE
         $('#datatable').dataTable();
         $.ajax({
             type: 'GET',
@@ -142,7 +158,36 @@
             dataType: 'json',
             contentType: 'application/json; charset=utf-8'
         });
+
+        //Get ALL Branch
+        $.ajax({
+            type: 'GET',
+            url: 'http://' + PORT + '/sas/sas_server/branch/getAll',
+            success: function (resp) {
+                if (resp.statuskey == true) {
+                    resp.branchList.forEach(function (entry) {
+                        $('#branch_ul').append('<li><a onclick="branchChange(' + "'" + entry.name + "','" + entry.id + "'" + ')">' + entry.name + '</a></li>');
+                    });
+                } else {
+                    swal(
+                        'Thất bại',
+                        resp.message,
+                        'error'
+                    );
+                    $(':button').prop('disabled', false);
+                }
+            },
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8'
+        });
     });
+
+    function branchChange(value, id) {
+        //alert(id);
+        branchid = id;
+        $('#branch').text('' + value);
+        $('#branch').val(value);
+    }
 
     function addTableData(item, index) {
         if (item.role == 1) {
@@ -246,7 +291,8 @@
     function createUser() {
         var credential = {
             username: $('#addUsername').val(),
-            password: $('#addPassword').val()
+            password: $('#addPassword').val(),
+            branchId: branchid
         };
 
         $.ajax({

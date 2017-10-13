@@ -165,11 +165,15 @@
 
         $(document).keyup(function (e) {
             if (e.keyCode == 27) { // escape key maps to keycode `27`
-                $overlay.removeClass('state-show');
-                $modal.removeClass('state-appear').addClass('state-leave');
+                if ($modal.hasClass('state-show')) {
+                    $overlay.removeClass('state-show');
+                    $modal.removeClass('state-appear').addClass('state-leave');
+                }
 
-                $dateoverlay.removeClass('state-show');
-                $datemodal.removeClass('state-appear').addClass('state-leave');
+                if ($datemodal.hasClass('state-show')) {
+                    $dateoverlay.removeClass('state-show');
+                    $datemodal.removeClass('state-appear').addClass('state-leave');
+                }
             }
         });
     });
@@ -240,15 +244,17 @@
         $datemodal.removeClass('state-leave').addClass('state-appear');
     };
 
-    function downloadAttendants(id,from,to) {       
+    function downloadAttendants(id,fromdate,todate) {       
 
-        var temp_fromdate = new Date(from).toDateString();
-        var fromdate = temp_fromdate.substr(4, temp_fromdate.length);
-        fromdate = fromdate.slice(6, 0, ',');
+        var res = {
+            from: fromdate,
+            to: todate
+        };
 
         $.ajax({
             type: 'GET',
             url: 'http://' + PORT + '/sas/sas_server/promo/event/' + id + '/members',
+            data: JSON.stringify(res),
             success: function (resp) {
                 if (resp.statuskey == true) {
                     var attendants = [];
@@ -261,6 +267,8 @@
                         });
                     };
                     excelExport(attendants);
+                    $dateoverlay.removeClass('state-show');
+                    $datemodal.removeClass('state-appear').addClass('state-leave');
                 } else {
                     swal(
                         'Thất bại',

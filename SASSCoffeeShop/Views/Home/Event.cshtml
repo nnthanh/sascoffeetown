@@ -398,9 +398,9 @@
         $(':button').prop('disabled', true);
         var vurl = 'http://'+ PORT +'/sas/sas_server/admin/event/create/' + '@Session["loggedToken"].ToString()';
 
-        var temp = new Date($('#eventdate').val()).toDateString();
-        var date = temp.substr(4, temp.length);
-        date = date.splice(6, 0, ',');
+        //var temp = new Date($('#eventdate').val()).toDateString();
+        //var date = temp.substr(4, temp.length);
+        //date = date.splice(6, 0, ',');
 
         var branch = {
             id: branchid
@@ -413,7 +413,7 @@
                 id: branchid
             },
             description: $('#briefDescription').val(),
-            dateExpired: date,
+            dateExpired: $('#eventdate').val(),
             discount: $('#discount').val(),
             name: $('#name').val()
         };

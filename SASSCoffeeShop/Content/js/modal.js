@@ -16,8 +16,15 @@ $(document).on('ready', function(){
     });
 
     $('.close').on('click', function(){
-      $overlay.removeClass('state-show');
-      $modal.removeClass('state-appear').addClass('state-leave');
+      if($modal.hasClass('state-show')) {
+        $overlay.removeClass('state-show');
+        $modal.removeClass('state-appear').addClass('state-leave');
+      }
+      
+      if($datemodal.hasClass('state-show')) {
+        $dateoverlay.removeClass('state-show');
+        $datemodal.removeClass('state-appear').addClass('state-leave');
+      }
     });
 
     $('.open').on('click', function(){
@@ -29,11 +36,6 @@ $(document).on('ready', function(){
       if($datemodal.hasClass('state-leave')) {
         $datemodal.removeClass('state-leave');
       }
-    });
-
-    $('.close').on('click', function(){
-      $dateoverlay.removeClass('state-show');
-      $datemodal.removeClass('state-appear').addClass('state-leave');
     });
 
     $('.open').on('click', function(){
