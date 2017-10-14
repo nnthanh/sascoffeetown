@@ -1,6 +1,6 @@
 $(document).on('ready', function(){
-    // $modal = $('.modal-frame');
-    // $overlay = $('.modal-overlay');
+    $oldmodal = $('.modal-frame');
+    $oldoverlay = $('.modal-overlay');
 
     $modal = $('#attendant');
     $overlay = $('#attendant');

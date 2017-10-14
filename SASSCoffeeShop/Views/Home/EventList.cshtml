@@ -252,7 +252,7 @@
         };
 
         $.ajax({
-            type: 'GET',
+            type: 'POST',
             url: 'http://' + PORT + '/sas/sas_server/promo/event/' + id + '/members',
             data: JSON.stringify(res),
             success: function (resp) {
