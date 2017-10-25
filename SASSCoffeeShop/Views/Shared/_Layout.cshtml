@@ -70,7 +70,7 @@
         </div>
     </div>
         <div class="wrapper">
-            <div class="sidebar" data-background-color="white" data-active-color="info">
+            <div class="sidebar" data-background-color="white" data-active-color="success">
                 <!--
                     Tip 1: you can change the color of the sidebar's background using: data-background-color="white | black"
                     Tip 2: you can change the color of the active button using the data-active-color="primary | info | success | warning | danger"
@@ -136,6 +136,12 @@
                                 <a href='@Url.Action("ManageUser","Home")'>
                                     <i class="ti-user"></i>
                                     <p>Manage User</p>
+                                </a>
+                            </li>
+                            <li id="tabpanel-9">
+                                <a href='@Url.Action("PostNews","Home")'>
+                                    <i class="ti-archive"></i>
+                                    <p>Post News</p>
                                 </a>
                             </li>
                         }                  
@@ -225,6 +231,7 @@
                 $('#tabpanel-6').removeClass('active');
                 $('#tabpanel-7').removeClass('active');
                 $('#tabpanel-8').removeClass('active');
+                $('#tabpanel-9').removeClass('active');
 
                 if ($('#brand').text().trim() == 'Nâng cấp thành viên') {
                     $('#tabpanel-1').addClass('active');
@@ -249,6 +256,9 @@
                 }
                 if ($('#brand').text().trim() == 'Manage user') {
                     $('#tabpanel-8').addClass('active');
+                }
+                if ($('#brand').text().trim() == 'Post news') {
+                    $('#tabpanel-9').addClass('active');
                 }
 
             });

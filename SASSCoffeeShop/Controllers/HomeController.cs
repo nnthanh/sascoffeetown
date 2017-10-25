@@ -93,5 +93,16 @@ namespace SASSCoffeeShop.Controllers
 
             return View();
         }
+
+        public ActionResult PostNews()
+        {
+            //Check session
+            if (Session["loggedUser"] == null || Session["loggedToken"] == null || Int32.Parse(Session["loggedRole"].ToString()) != 1)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            return View();
+        }
     }
 }
