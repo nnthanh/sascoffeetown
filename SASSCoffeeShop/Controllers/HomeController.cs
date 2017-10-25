@@ -53,7 +53,7 @@ namespace SASSCoffeeShop.Controllers
         public ActionResult Event()
         {
             //Check session
-            if (Session["loggedUser"] == null || Session["loggedToken"] == null || Int32.Parse(Session["loggedRole"].ToString()) != 1)
+            if (Session["loggedUser"] == null || Session["loggedToken"] == null)
             {
                 return RedirectToAction("Login", "Account");
             }
