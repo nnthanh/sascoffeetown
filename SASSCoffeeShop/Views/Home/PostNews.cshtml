@@ -191,6 +191,7 @@
 </div>
 
 <script>
+    var selectedImg;
     $('#brand').text('Post news');
     var branchid = 0;
     function cropper(event, inputId) {
@@ -248,6 +249,7 @@
                     img.src = dataUrl;
 
                     preview.appendChild(img);
+                    selectedImg = img;
                 }
                 image.src = readerEvent.target.result;
             }
@@ -348,50 +350,74 @@
     document.getElementById("submitBtn").onclick = function () {
         $('#loader').show();
         $(':button').prop('disabled', true);
-        var vurl = 'http://'+ PORT +'/sas/sas_server/admin/event/create/' + '@Session["loggedToken"].ToString()';
+        var vurl = 'http://' + PORT + '/sas/sas_server/admin/news/create/' + '@Session["loggedToken"].ToString()';
 
         var branch = {
             id: branchid
         };
 
-        var res = {
-            //userType: $('#for').val(),
-            fullDescription: $('#editor').html(),
-            branch: {
-                id: branchid
-            },
-            description: $('#briefDescription').val(),
-            dateExpired: $('#eventdate').val(),
-            discount: $('#discount').val(),
-            name: $('#name').val()
-        };
+        if (selectedImg != null) {
+            var res = {
+                dateExpired: $('#eventdate').val(),
+                description: $('#briefDescription').val(),
+                img: selectedImg.src,
+                fullDescription: $('#editor').html(),
+                name: $('#name').val(),
+                branch: {
+                    id: branchid
+                }                               
+            };
+        } else {
+            var res = {
+                dateExpired: $('#eventdate').val(),
+                description: $('#briefDescription').val(),
+                img: "",
+                fullDescription: $('#editor').html(),
+                name: $('#name').val(),
+                branch: {
+                    id: branchid
+                }                   
+            };
+        }
 
-        $.ajax({
-            type: 'POST',
-            url: vurl,
-            data: JSON.stringify(res),
-            success: function (resp) {
-                if (resp.statuskey == true) {
-                    $(':button').prop('disabled', false);
-                    swal(
-                        'Thành công',
-                        resp.message,
-                        'success'
-                    );
-                    $('#loader').hide();
-                } else {
-                    swal(
-                        'Thất bại',
-                        resp.message,
-                        'error'
-                    );
-                    $(':button').prop('disabled', false);
-                    $('#loader').hide();
-                }
-            },
-            dataType: 'json',
-            contentType: 'application/json; charset=utf-8'
-        });
+        try {
+            $.ajax({
+                type: 'POST',
+                url: vurl,
+                data: JSON.stringify(res),
+                success: function (resp) {
+
+                    if (resp.statuskey == true) {
+                        $(':button').prop('disabled', false);
+                        swal(
+                            'Thành công',
+                            resp.message,
+                            'success'
+                        );
+                        $('#loader').hide();
+                    } else {
+                        swal(
+                            'Thất bại',
+                            resp.message,
+                            'error'
+                        );
+                        $(':button').prop('disabled', false);
+                        $('#loader').hide();
+                    }
+                },
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8'
+            });
+        } catch (err) {
+            swal(
+                'Thất bại',
+                err.toString(),
+                'error'
+            );
+            $(':button').prop('disabled', false);
+            $('#loader').hide();
+        }
+        
 
     };
 </script>
