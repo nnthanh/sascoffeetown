@@ -388,27 +388,17 @@
         return this.slice(0, idx) + str + this.slice(idx + Math.abs(rem));
     };
 
-    //$(document).keypress(function (e) {
-    //    if (e.which == 13) {
-    //        $('#submitBtn').click();
-    //    }
-    //});
-
     document.getElementById("submitBtn").onclick = function () {
         $('#loader').show();
         $(':button').prop('disabled', true);
         var vurl = 'http://'+ PORT +'/sas/sas_server/admin/event/create/' + '@Session["loggedToken"].ToString()';
 
-        //var temp = new Date($('#eventdate').val()).toDateString();
-        //var date = temp.substr(4, temp.length);
-        //date = date.splice(6, 0, ',');
 
         var branch = {
             id: branchid
         };
 
         var res = {
-            //userType: $('#for').val(),
             fullDescription: $('#editor').html(),
             branch: {
                 id: branchid

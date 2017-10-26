@@ -238,7 +238,6 @@
                             for (var i = 0; i < item.length; i++) {
                                 preview.removeChild(item[i]);
                             }
-                            preview.removeChild(item);
                         } catch (err) {
 
                         }
@@ -249,7 +248,10 @@
                     img.src = dataUrl;
 
                     preview.appendChild(img);
-                    selectedImg = img;
+                    if (inputId == 'picture') {
+                        selectedImg = img;
+                    }
+                    
                 }
                 image.src = readerEvent.target.result;
             }
