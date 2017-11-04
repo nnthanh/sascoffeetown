@@ -128,13 +128,16 @@
     </div>
 </div>
 <div class="modal-overlay" id="datepick"></div>
-
 <script>
 
     $('#brand').text('Event list');
     var branchid;
     var tableData;
     var currenteventid = null;
+
+    var userRole = @Session["loggedRole"];
+    var userBranchId = @Session["loggedBranchId"];
+
     $(document).ready(function () {
         $('#datatable').dataTable();
         $.ajax({
@@ -143,9 +146,17 @@
             success: function (resp) {
                 if (resp.statuskey == true) {
 
-                    resp.branchList.forEach(function (entry) {
-                        $('#branch_ul').append('<li><a onclick="branchOnChange(' + "'" + entry.name + "','" + entry.id + "'" + ')">' + entry.name + '</a></li>');
-                    });
+                    if (userRole != 1) {
+                        resp.branchList.forEach(function (entry) {
+                            if (entry.id == userBranchId) {
+                                branchChange(entry.name, entry.id);
+                            }
+                        });
+                    } else {
+                        resp.branchList.forEach(function (entry) {
+                            $('#branch_ul').append('<li><a onclick="branchChange(' + "'" + entry.name + "','" + entry.id + "'" + ')">' + entry.name + '</a></li>');
+                        });
+                    }
                 } else {
                     swal(
                         'Thất bại',
@@ -160,7 +171,7 @@
         });
 
         $('#datatable tbody').on('click', 'tr', function () {
-            
+
         });
 
         $(document).keyup(function (e) {
@@ -193,7 +204,7 @@
         };
     };
 
-    function branchOnChange(value, id) {
+    function branchChange(value, id) {
         branchid = id;
         $('#branch').text('' + value);
         $('#branch').val(value);
@@ -235,7 +246,23 @@
         item.dateExpired,
         item.description,
         '<button class="btn btn-success" onclick="showModal(' + item.id + ')"><span class="ti-gallery"></span></button>' + " " +
-        '<button class="btn btn-danger" id="deleteEvent" onclick="showDateModal(' + item.id + ')"><span class="ti-import"></span></button>']);
+        '<button class="btn btn-danger" id="deleteEvent" onclick="showDateModal(' + item.id + ')"><span class="ti-import"></span></button>' + " " +
+        '<button class="btn btn-warning" onclick="editEvent(' + item.id + ')"><span class="ti-pencil"></span></button>']);
+
+        var day = ("0" + new Date(Date.parse(item.dateExpired)).getDate()).slice(-2);
+        var month = ("0" + (new Date(Date.parse(item.dateExpired)).getMonth() + 1)).slice(-2);
+        var today = new Date(Date.parse(item.dateExpired)).getFullYear()+"-"+(month)+"-"+(day) ;
+
+        $('#edit-date').val(today);
+        $('#edit-des').val(item.description);
+        $('#edit-discount').val(item.discount);
+        $('#edit-fulldes').prepend(item.fullDescription);
+    };
+
+    function editEvent(eventId) {
+        var link = "@Url.Action("EditEvent", "Home", new { id = "eId" })";
+        link = link.replace("eId",eventId);
+        location.href = link;
     };
 
     function showDateModal(id) {
@@ -244,7 +271,7 @@
         $datemodal.removeClass('state-leave').addClass('state-appear');
     };
 
-    function downloadAttendants(id,fromdate,todate) {       
+    function downloadAttendants(id,fromdate,todate) {
 
         var res = {
             from: fromdate,
@@ -320,9 +347,9 @@
             dataType: 'json',
             contentType: 'application/json; charset=utf-8'
         });
-       
+
         $overlay.addClass('state-show');
-        $modal.removeClass('state-leave').addClass('state-appear');     
+        $modal.removeClass('state-leave').addClass('state-appear');
     }
 
     function excelExport(data) {

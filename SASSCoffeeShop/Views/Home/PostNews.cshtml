@@ -50,13 +50,13 @@
 
 
                         <div class="row">
-                            <div class="col-md-5">
+                            <div class="col-sm-12 col-md-8 col-lg-6">
                                 <div class="typo-line">
                                     <div class="form-group">
                                         <p class="category">Picture</p>
                                         <a class="btn" title="" id="pictureBtn2" data-original-title="Insert picture (or just drag &amp; drop)"><i class="fa fa-picture-o"></i></a>
                                         <input type="file" data-role="magic-overlay" data-target="#pictureBtn2" onchange="cropper(event,'picture')" >
-                                        <div id="picture" class="form-control border-input" contenteditable="false" style="overflow:hidden;height:auto;">
+                                        <div id="picture" class="form-control border-input" contenteditable="false" style="overflow:hidden;height:auto;width:auto;">
                                         </div>
                                 </div>
                             </div>
@@ -64,7 +64,7 @@
                             </div>
 
                         <div class="row">
-                            <div class="col-sm-6 col-md-5 offset-md-2 col-lg-6 offset-lg-0">
+                            <div class="col-sm-12 col-md-12 offset-md-2 col-lg-12 offset-lg-0">
                                 <div class="typo-line">
                                     <div class="form-group">
                                         <p class="category">Brief Description</p>
@@ -303,6 +303,9 @@
         }
     });
 
+    var userRole = @Session["loggedRole"];
+    var userBranchId = @Session["loggedBranchId"];
+
     $(document).ready(function () {
         $.ajax({
             type: 'GET',
@@ -310,9 +313,17 @@
             success: function (resp) {
                 if (resp.statuskey == true) {
 
-                    resp.branchList.forEach(function (entry) {
-                        $('#branch_ul').append('<li><a onclick="branchOnChange(' + "'" + entry.name + "','" + entry.id + "'" + ')">' + entry.name + '</a></li>');
-                    });
+                    if (userRole != 1) {
+                        resp.branchList.forEach(function (entry) {
+                            if (entry.id == userBranchId) {
+                                branchChange(entry.name, entry.id);
+                            }                   
+                        });
+                    } else {
+                        resp.branchList.forEach(function (entry) {
+                            $('#branch_ul').append('<li><a onclick="branchChange(' + "'" + entry.name + "','" + entry.id + "'" + ')">' + entry.name + '</a></li>');
+                        });
+                    }
                 } else {
                     swal(
                         'Thất bại',
@@ -334,15 +345,10 @@
         });
     });
 
-    function branchOnChange(value, id) {
+    function branchChange(value, id) {
         branchid = id;
         $('#branch').text('' + value);
         $('#branch').val(value);
-    }
-
-    function forOnChange(value) {
-        $('#for').text('' + value);
-        $('#for').val(value);
     }
 
     String.prototype.splice = function (idx, rem, str) {
@@ -495,6 +501,11 @@
       });
 </script>
 <!-- /bootstrap-wysiwyg -->
+
+<script>
+    var userRole = @Session["loggedRole"];
+    var userBranchId = @Session["loggedBranchId"];
+</script>
 <!-- bootstrap-wysiwyg -->
 <script src="~/Content/vendors/bootstrap-wysiwyg/js/bootstrap-wysiwyg.min.js"></script>
 <script src="~/Content/vendors/jquery.hotkeys/jquery.hotkeys.js"></script>

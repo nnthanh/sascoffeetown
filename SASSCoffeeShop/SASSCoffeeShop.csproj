@@ -273,6 +273,7 @@
     <Content Include="Views\Home\ContentUpload.cshtml" />
     <Content Include="Views\Home\ManageUser.cshtml" />
     <Content Include="Views\Home\PostNews.cshtml" />
+    <Content Include="Views\Home\EditEvent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

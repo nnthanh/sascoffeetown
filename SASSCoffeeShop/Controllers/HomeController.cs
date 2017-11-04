@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -61,6 +62,22 @@ namespace SASSCoffeeShop.Controllers
             return View();
         }
 
+        public ActionResult EditEvent(int? id)
+        {
+            //Check session
+            if (Session["loggedUser"] == null || Session["loggedToken"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            ViewBag.Id = id;
+            return View();
+        }
+
         public ActionResult Branch()
         {
             //Check session
@@ -79,7 +96,7 @@ namespace SASSCoffeeShop.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
-
+            
             return View();
         }
 
@@ -97,7 +114,7 @@ namespace SASSCoffeeShop.Controllers
         public ActionResult PostNews()
         {
             //Check session
-            if (Session["loggedUser"] == null || Session["loggedToken"] == null || Int32.Parse(Session["loggedRole"].ToString()) != 1)
+            if (Session["loggedUser"] == null || Session["loggedToken"] == null)
             {
                 return RedirectToAction("Login", "Account");
             }

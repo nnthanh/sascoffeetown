@@ -89,8 +89,7 @@
                     if (userRole != 1) {
                         resp.branchList.forEach(function (entry) {
                             if (entry.id == userBranchId) {
-                                branchChange(entry.name, entry.id)
-                                //$('#branch_ul').append('<li><a onclick="branchChange(' + "'" + entry.name + "','" + entry.id + "'" + ')">' + entry.name + '</a></li>');
+                                branchChange(entry.name, entry.id);
                             }                   
                         });
                     } else {
