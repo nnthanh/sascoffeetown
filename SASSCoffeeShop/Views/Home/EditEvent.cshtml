@@ -357,7 +357,10 @@
                         'Thành công',
                         resp.message,
                         'success'
-                    );
+                    ).then(function () {
+                        location.href='@Url.Action("EventList","Home")';
+                    });
+
                     $('#loader').hide();
                 } else {
                     swal(
