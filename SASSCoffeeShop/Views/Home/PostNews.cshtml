@@ -55,13 +55,13 @@
                                     <div class="form-group">
                                         <p class="category">Picture</p>
                                         <a class="btn" title="" id="pictureBtn2" data-original-title="Insert picture (or just drag &amp; drop)"><i class="fa fa-picture-o"></i></a>
-                                        <input type="file" data-role="magic-overlay" data-target="#pictureBtn2" onchange="cropper(event,'picture')" >
+                                        <input type="file" data-role="magic-overlay" data-target="#pictureBtn2" onchange="cropper(event,'picture')">
                                         <div id="picture" class="form-control border-input" contenteditable="false" style="overflow:hidden;height:auto;width:auto;">
                                         </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                            </div>
 
                         <div class="row">
                             <div class="col-sm-12 col-md-12 offset-md-2 col-lg-12 offset-lg-0">
@@ -251,7 +251,7 @@
                     if (inputId == 'picture') {
                         selectedImg = img;
                     }
-                    
+
                 }
                 image.src = readerEvent.target.result;
             }
@@ -317,9 +317,10 @@
                         resp.branchList.forEach(function (entry) {
                             if (entry.id == userBranchId) {
                                 branchChange(entry.name, entry.id);
-                            }                   
+                            }
                         });
                     } else {
+                        $('#branch_ul').append('<li><a onclick="branchChange(' + "'" + 'All' + "','" + '0' + "'" + ')">All</a></li>');
                         resp.branchList.forEach(function (entry) {
                             $('#branch_ul').append('<li><a onclick="branchChange(' + "'" + entry.name + "','" + entry.id + "'" + ')">' + entry.name + '</a></li>');
                         });
@@ -373,7 +374,7 @@
                 name: $('#name').val(),
                 branch: {
                     id: branchid
-                }                               
+                }
             };
         } else {
             var res = {
@@ -384,7 +385,7 @@
                 name: $('#name').val(),
                 branch: {
                     id: branchid
-                }                   
+                }
             };
         }
 
@@ -425,7 +426,7 @@
             $(':button').prop('disabled', false);
             $('#loader').hide();
         }
-        
+
 
     };
 </script>
@@ -433,72 +434,72 @@
 <!-- bootstrap-wysiwyg -->
 <script>
     $(document).ready(function () {
-        $('.xcxc').click(function() {
-          $('#descr').val($('#editor').html());
+        $('.xcxc').click(function () {
+            $('#descr').val($('#editor').html());
         });
-      });
+    });
 
-      $(document).ready(function() {
+    $(document).ready(function () {
         function initToolbarBootstrapBindings() {
-          var fonts = ['Serif', 'Sans', 'Arial', 'Arial Black', 'Courier',
-              'Courier New', 'Comic Sans MS', 'Helvetica', 'Impact', 'Lucida Grande', 'Lucida Sans', 'Tahoma', 'Times',
-              'Times New Roman', 'Verdana'
+            var fonts = ['Serif', 'Sans', 'Arial', 'Arial Black', 'Courier',
+                'Courier New', 'Comic Sans MS', 'Helvetica', 'Impact', 'Lucida Grande', 'Lucida Sans', 'Tahoma', 'Times',
+                'Times New Roman', 'Verdana'
             ],
-            fontTarget = $('[title=Font]').siblings('.dropdown-menu');
-          $.each(fonts, function(idx, fontName) {
-            fontTarget.append($('<li><a data-edit="fontName ' + fontName + '" style="font-family:\'' + fontName + '\'">' + fontName + '</a></li>'));
-          });
-          $('a[title]').tooltip({
-            container: 'body'
-          });
-          $('.dropdown-menu input').click(function() {
-              return false;
+                fontTarget = $('[title=Font]').siblings('.dropdown-menu');
+            $.each(fonts, function (idx, fontName) {
+                fontTarget.append($('<li><a data-edit="fontName ' + fontName + '" style="font-family:\'' + fontName + '\'">' + fontName + '</a></li>'));
+            });
+            $('a[title]').tooltip({
+                container: 'body'
+            });
+            $('.dropdown-menu input').click(function () {
+                return false;
             })
-            .change(function() {
-              $(this).parent('.dropdown-menu').siblings('.dropdown-toggle').dropdown('toggle');
-            })
-            .keydown('esc', function() {
-              this.value = '';
-              $(this).change();
+                .change(function () {
+                    $(this).parent('.dropdown-menu').siblings('.dropdown-toggle').dropdown('toggle');
+                })
+                .keydown('esc', function () {
+                    this.value = '';
+                    $(this).change();
+                });
+
+            $('[data-role=magic-overlay]').each(function () {
+                var overlay = $(this),
+                    target = $(overlay.data('target'));
+                overlay.css('opacity', 0).css('position', 'absolute').offset(target.offset()).width(target.outerWidth()).height(target.outerHeight());
             });
 
-          $('[data-role=magic-overlay]').each(function() {
-            var overlay = $(this),
-              target = $(overlay.data('target'));
-            overlay.css('opacity', 0).css('position', 'absolute').offset(target.offset()).width(target.outerWidth()).height(target.outerHeight());
-          });
+            if ("onwebkitspeechchange" in document.createElement("input")) {
+                var editorOffset = $('#editor').offset();
 
-          if ("onwebkitspeechchange" in document.createElement("input")) {
-            var editorOffset = $('#editor').offset();
-
-            $('.voiceBtn').css('position', 'absolute').offset({
-              top: editorOffset.top,
-              left: editorOffset.left + $('#editor').innerWidth() - 35
-            });
-          } else {
-            $('.voiceBtn').hide();
-          }
+                $('.voiceBtn').css('position', 'absolute').offset({
+                    top: editorOffset.top,
+                    left: editorOffset.left + $('#editor').innerWidth() - 35
+                });
+            } else {
+                $('.voiceBtn').hide();
+            }
         }
 
         function showErrorAlert(reason, detail) {
-          var msg = '';
-          if (reason === 'unsupported-file-type') {
-            msg = "Unsupported format " + detail;
-          } else {
-            console.log("error uploading file", reason, detail);
-          }
-          $('<div class="alert"> <button type="button" class="close" data-dismiss="alert">&times;</button>' +
-            '<strong>File upload error</strong> ' + msg + ' </div>').prependTo('#alerts');
+            var msg = '';
+            if (reason === 'unsupported-file-type') {
+                msg = "Unsupported format " + detail;
+            } else {
+                console.log("error uploading file", reason, detail);
+            }
+            $('<div class="alert"> <button type="button" class="close" data-dismiss="alert">&times;</button>' +
+                '<strong>File upload error</strong> ' + msg + ' </div>').prependTo('#alerts');
         }
 
         initToolbarBootstrapBindings();
 
         $('#editor').wysiwyg({
-          fileUploadError: showErrorAlert
+            fileUploadError: showErrorAlert
         });
 
         window.prettyPrint && prettyPrint();
-      });
+    });
 </script>
 <!-- /bootstrap-wysiwyg -->
 
