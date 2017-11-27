@@ -185,6 +185,7 @@
             url: 'http://' + PORT + '/sas/sas_server/branch/getAll',
             success: function (resp) {
                 if (resp.statuskey == true) {
+                    $('#branch_ul').append('<li><a onclick="branchChange(' + "'" + 'All' + "','" + '0' + "'" + ')">All</a></li>');
                     resp.branchList.forEach(function (entry) {
                         $('#branch_ul').append('<li><a onclick="branchChange(' + "'" + entry.name + "','" + entry.id + "'" + ')">' + entry.name + '</a></li>');
                     });
@@ -214,6 +215,12 @@
             $('#datatable').dataTable().fnAddData([
                 item.name,
                 "Main Admin",
+                '<button class="' + 'btn btn-success" onclick="showModal(' + item.id + ",'" + item.name + "'" + ')"><span class="ti-pencil"></span></button>' + " " +
+                '<button class="' + 'btn btn-danger" onclick="deleteUser(' + item.id + ')"><span class="ti-trash"></span></button>']);
+        } else if (item.role == 2 && item.branchId == 0) {
+            $('#datatable').dataTable().fnAddData([
+                item.name,
+                "Super Branch Admin",
                 '<button class="' + 'btn btn-success" onclick="showModal(' + item.id + ",'" + item.name + "'" + ')"><span class="ti-pencil"></span></button>' + " " +
                 '<button class="' + 'btn btn-danger" onclick="deleteUser(' + item.id + ')"><span class="ti-trash"></span></button>']);
         } else {

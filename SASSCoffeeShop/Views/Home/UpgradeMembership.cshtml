@@ -86,15 +86,19 @@
             success: function (resp) {
                 if (resp.statuskey == true) {
 
-                    if (userRole != 1) {
+                    if (userRole == 1) {
                         resp.branchList.forEach(function (entry) {
-                            if (entry.id == userBranchId) {
-                                branchChange(entry.name, entry.id);
-                            }                   
+                            $('#branch_ul').append('<li><a onclick="branchChange(' + "'" + entry.name + "','" + entry.id + "'" + ')">' + entry.name + '</a></li>');
+                        });
+                    } else if (userRole == 2 && userBranchId == 0) {
+                        resp.branchList.forEach(function (entry) {
+                            $('#branch_ul').append('<li><a onclick="branchChange(' + "'" + entry.name + "','" + entry.id + "'" + ')">' + entry.name + '</a></li>');
                         });
                     } else {
                         resp.branchList.forEach(function (entry) {
-                            $('#branch_ul').append('<li><a onclick="branchChange(' + "'" + entry.name + "','" + entry.id + "'" + ')">' + entry.name + '</a></li>');
+                            if (entry.id == userBranchId) {
+                                branchChange(entry.name, entry.id);
+                            }
                         });
                     }
                     
