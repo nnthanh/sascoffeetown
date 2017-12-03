@@ -345,10 +345,12 @@
                 if (resp.statuskey == true) {
                     
                     if (userRole == 1) {
+                        $('#branch_ul').append('<li><a onclick="branchChange(' + "'" + 'All' + "','" + '0' + "'" + ')">All</a></li>');
                         resp.branchList.forEach(function (entry) {
                             $('#branch_ul').append('<li><a onclick="branchChange(' + "'" + entry.name + "','" + entry.id + "'" + ')">' + entry.name + '</a></li>');
                         });
                     } else if (userRole == 2 && userBranchId == 0) {
+                        $('#branch_ul').append('<li><a onclick="branchChange(' + "'" + 'All' + "','" + '0' + "'" + ')">All</a></li>');
                         resp.branchList.forEach(function (entry) {
                             $('#branch_ul').append('<li><a onclick="branchChange(' + "'" + entry.name + "','" + entry.id + "'" + ')">' + entry.name + '</a></li>');
                         });

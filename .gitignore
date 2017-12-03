@@ -5,3 +5,8 @@
 *.config
 *.config
 *.zip
+.vs/config/applicationhost.config
+.vs/SASSCoffeeShop/v14/.suo
+SASSCoffeeShop/bin/roslyn/csc.exe
+*.exe
+SASSCoffeeShop/obj/Debug/SASSCoffeeShop.csproj.FileListAbsolute.txt
